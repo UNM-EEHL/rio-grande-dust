@@ -3,26 +3,26 @@
   "use strict";
 
   const TYPES = {
-    percent: { btn: "Change all flow", label: "Change in river flow, every reach and day",
+    percent: { btn: "Change the flow", label: "Change in flow at the Central Avenue gauge",
                min: -90, max: 100, step: 1, def: -10, toValue: v => v / 100,
                show: v => (v > 0 ? "+" : "") + v + "%",
-               hint: "A proportional change to the flow the river actually carried on each day of 2015 to 2024." },
+               hint: "A proportional change to the flow the Central Avenue gauge actually recorded on each day of 2015 to 2024. The rest of the river moves in the same proportion." },
     seasonal: { btn: "Dry-season cut", label: "Annual cut, concentrated in July to October",
                 min: 2, max: 60, step: 1, def: 30, toValue: v => v / 100,
                 show: v => v + "% a year",
-                hint: "The same annual loss of water, taken one and a half times as hard in July to October, the way the climate literature expects the loss to fall." },
-    add: { btn: "Add water", label: "Water added to every reach",
+                hint: "The same annual loss of water at the Central Avenue gauge, taken one and a half times as hard in July to October, the way the climate literature expects the loss to fall. The rest of the river moves in the same proportion." },
+    add: { btn: "Add water", label: "Water added at the Central Avenue gauge",
            min: 10, max: 500, step: 10, def: 100, toValue: v => v,
            show: v => "+" + v + " cfs",
-           hint: "A fixed amount of extra flow, in cubic feet per second (cfs), on every reach and every day." },
-    floor: { btn: "Low-flow floor", label: "Minimum flow on every reach",
+           hint: "A fixed amount of extra flow at the Central Avenue gauge, in cubic feet per second (cfs), every day. The rest of the river rises in the same proportion that day." },
+    floor: { btn: "Low-flow floor", label: "Minimum flow at the Central Avenue gauge",
              min: 10, max: 300, step: 5, def: 100, toValue: v => v,
              show: v => v + " cfs",
-             hint: "Every reach-day below this flow is raised to it; days above it are left alone. The 2003 biological opinion required 100 cfs through Albuquerque until 2016." },
-    reference: { btn: "Versus a dry channel", label: "Flow in the comparison channel",
+             hint: "Every day the Central Avenue gauge reads below this flow is raised to it, and the rest of the river rises in the same proportion; days above it are left alone. The 2003 biological opinion required 100 cfs at the Central Avenue gauge until 2016." },
+    reference: { btn: "Versus a dry river", label: "Flow at the Central Avenue gauge in the comparison",
                  min: 1, max: 100, step: 1, def: 1, toValue: v => v,
                  show: v => v + " cfs",
-                 hint: "What the river as it actually flowed is worth, compared with a channel that carries only this much water. 1 cfs is essentially dry." }
+                 hint: "What the river as it actually flowed is worth, compared with a river carrying only this much at the Central Avenue gauge, with the rest of the river in the same proportion. 1 cfs is essentially dry." }
   };
 
   const PRESETS = [
@@ -32,17 +32,17 @@
     { name: "Climate C2: 30% less", type: "percent", v: -30 },
     { name: "Climate C3: 50% less", type: "percent", v: -50 },
     { name: "Climate C5: 30%, dry season", type: "seasonal", v: 30 },
-    { name: "The river versus a dry channel", type: "reference", v: 1 }
+    { name: "The river versus a dry river", type: "reference", v: 1 }
   ];
 
   function describe(sc, raw) {
     switch (sc.type) {
-      case "percent": return raw < 0 ? `a river carrying ${-raw}% less water on every day of 2015 to 2024`
-                                     : `a river carrying ${raw}% more water on every day of 2015 to 2024`;
-      case "seasonal": return `a river losing ${raw}% of its water a year, with the loss concentrated in July to October`;
-      case "add": return `${raw} more cubic feet per second (cfs) on every reach, every day`;
-      case "floor": return `no reach allowed below ${raw} cfs`;
-      case "reference": return `the river as it actually flowed, compared with a channel carrying ${raw} cfs`;
+      case "percent": return raw < 0 ? `${-raw}% less water at the Central Avenue gauge on every day of 2015 to 2024`
+                                     : `${raw}% more water at the Central Avenue gauge on every day of 2015 to 2024`;
+      case "seasonal": return `a ${raw}% annual loss of water at the Central Avenue gauge, concentrated in July to October`;
+      case "add": return `${raw} more cubic feet per second (cfs) at the Central Avenue gauge every day`;
+      case "floor": return `a floor of ${raw} cfs at the Central Avenue gauge`;
+      case "reference": return `the river as it actually flowed, compared with a river carrying ${raw} cfs at the Central Avenue gauge`;
     }
   }
 

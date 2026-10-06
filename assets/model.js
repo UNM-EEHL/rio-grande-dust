@@ -6,6 +6,10 @@
  * chain of that do-file's Section 11 to the scenario a reader sets:
  *
  *   dE_t  = SUM_r  H_rt x dlnQ_rt                    (Eq. 34)
+ *
+ * Every scenario is set at the Central Avenue gauge (USGS 08330000, reach 3),
+ * and on each day every reach moves in the same proportion as Central Avenue,
+ * so dlnQ_rt is the same for all four reaches.
  *   dC_t  = PM10_t x ( exp( b_E x dE_t ) - 1 )       (Eq. 28)
  *   dD_te = Y0_te x ( exp( beta_e x dC_t ) - 1 )     (Eq. 29)
  *   V_te  = dD_te x VSL                              (Eq. 30)
@@ -54,7 +58,7 @@
         resp: Float64Array.from(dailyRows, r => r.y0_resp)
       },
       pop: Float64Array.from(dailyRows, r => r.pop_exp),
-      b100: Uint8Array.from(dailyRows, r => r.b100)
+      bindc: Uint8Array.from(dailyRows, r => r.bindc)
     };
     const valid = Uint8Array.from(D.pm10, v => (Number.isFinite(v) ? 1 : 0));
     const draws = {
@@ -68,9 +72,10 @@
     let popSum = 0;
     for (let t = 0; t < n; t++) popSum += D.pop[t];
 
-    /* The change in the log of one reach's flow under a scenario. A
-       proportional change applies to every reach-day; the others need a
-       positive flow, and a reach with zero or missing flow contributes zero. */
+    /* The change in the log of flow under a scenario, set at the Central
+       Avenue gauge, where q is that day's Central Avenue flow. A proportional
+       change applies to every day; the others need a positive flow at the
+       gauge, and on a day without one the scenario changes nothing. */
     function dlnq(sc, q, mo) {
       const v = sc.value;
       switch (sc.type) {
@@ -88,15 +93,16 @@
     function exposure(sc) {
       const dE = new Float64Array(n);
       for (let t = 0; t < n; t++) {
-        let s = 0;
-        for (let r = 0; r < 4; r++) s += D.H[r][t] * dlnq(sc, D.q[r][t], D.mo[t]);
-        dE[t] = s;
+        const g = dlnq(sc, D.q[2][t], D.mo[t]);
+        let h = 0;
+        for (let r = 0; r < 4; r++) h += D.H[r][t];
+        dE[t] = h * g;
       }
       return dE;
     }
 
     function daySet(which) {
-      if (which === "bind") return Uint8Array.from(valid, (v, t) => v && D.b100[t] ? 1 : 0);
+      if (which === "bind") return Uint8Array.from(valid, (v, t) => v && D.bindc[t] ? 1 : 0);
       return valid;
     }
 
