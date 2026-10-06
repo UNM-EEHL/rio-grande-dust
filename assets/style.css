@@ -58,9 +58,8 @@ p { margin: 0 0 1rem; }
 .card { border-top: 4px solid var(--maroon); }
 .card.c-blue { border-top-color: var(--blue); }
 .card.c-gray { border-top-color: var(--gray); }
-.card .thumb { height: 118px; margin: -4px 0 4px; background: #FCFBFB; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
-.card .thumb svg { width: 100%; height: 100%; display: block; }
-.card .thumb-cap { font-size: 0.78rem; color: var(--muted); margin-bottom: 12px; line-height: 1.35; }
+.card .thumb { margin: -4px 0 14px; padding: 6px 4px 2px; background: #FCFBFB; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.card .thumb svg { width: 100%; height: auto; display: block; }
 .reset { font: inherit; font-size: 0.86rem; font-weight: 600; margin-top: 4px; padding: 7px 12px; width: 100%; border: 1px solid var(--maroon); background: #fff; color: var(--maroon); border-radius: 6px; cursor: pointer; }
 .reset:hover { background: var(--maroon-pale); }
 .reset::before { content: "\21BA  "; }
