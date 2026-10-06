@@ -1,5 +1,5 @@
 River Flow, Dust, and Human Health on the Middle Rio Grande: interactive tools
-Environmental Economics and Health Lab, University of New Mexico
+Environmental Economics and Health Lab (EEHL), University of New Mexico
 
 What this is
   Three browser tools built on the results of "Flow in the Middle Rio Grande
@@ -10,7 +10,7 @@ What this is
     mortality.html   river flow and short-term modeled mortality (all-causes,
                      cardiovascular, respiratory), Bernalillo and Sandoval
                      counties
-    costs.html       river flow and the economic cost of that mortality
+    costs.html       river flow and the economic damages from that mortality
 
   index.html is the overview page. Everything runs in the browser; there is
   no server.
@@ -20,7 +20,7 @@ Scenarios are set at the Central Avenue gauge (public tools only)
   Albuquerque (USGS 08330000), and on each day the other three reaches move
   in the same proportion. This is done only for these public tools, so a
   reader can change one familiar flow and see what follows for PM10,
-  mortality, and costs. It is NOT the study's headline. The paper's results,
+  mortality, and economic damages. It is NOT the study's headline. The paper's results,
   its valuation, and every number in its documents apply the added flow, the
   low-flow floor, and the dry-channel comparison to each reach's own gauge
   (Section 11 of the replication do-file). The 10% cut and the climate

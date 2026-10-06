@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rio Grande Flow, Dust, and Human Health Tools</title>
-<meta name="description" content="Interactive tools showing how river flow in the Middle Rio Grande changes downwind PM₁₀, short-term mortality, and the economic cost of that mortality in the Albuquerque area.">
+<meta name="description" content="Interactive tools showing how river flow in the Middle Rio Grande changes downwind PM₁₀, short-term mortality, and the economic damages from that mortality in the Albuquerque area.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,13 +17,13 @@
   <div class="wrap">
     <a class="brand" href="index.html">
       <img src="assets/lab-mark.png" alt="">
-      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab</span></span>
+      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab (EEHL)</span></span>
     </a>
     <nav class="nav" aria-label="Tools">
       <a href="index.html" aria-current="page">Overview</a>
       <a href="pm10.html">River flow and PM<sub>10</sub></a>
-      <a href="mortality.html">Mortality</a>
-      <a href="costs.html">Economic costs</a>
+      <a href="mortality.html">Human Mortality</a>
+      <a href="costs.html">Economic Damages</a>
     </nav>
   </div>
 </header>
@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Interactive research tools</div>
     <h1>River Flow, Dust, and Human Health on the Middle Rio Grande</h1>
-    <p class="lede">When the Rio Grande runs low through Albuquerque, more of its bed is left bare, and the people living downwind breathe more coarse particulate matter (PM<sub>10</sub>). These tools let you change how much water the river carries and see what follows for the air, for short-term mortality, and for the economic cost of that mortality.</p>
+    <p class="lede">When the Rio Grande runs low through Albuquerque, more of its bed is left bare, and the people living downwind breathe more coarse particulate matter (PM<sub>10</sub>). These tools let you change how much water the river carries and see what follows for the air, for short-term mortality, and for the economic damages from that mortality.</p>
   </div>
 </section>
 
@@ -50,15 +50,15 @@
     <div class="card c-blue">
       <div class="thumb" id="t-mort" role="img" aria-label="Additional modeled mortality by year, 2015 to 2024, with 10% less water"></div>
       <div class="tag">Health</div>
-      <h3>River flow and mortality</h3>
+      <h3>River flow and human mortality</h3>
       <p>The annual mortality from all-causes, from cardiovascular disease, and from respiratory disease that follows from a change in river flow.</p>
       <a class="go" href="mortality.html">Open tool</a>
     </div>
     <div class="card c-gray">
-      <div class="thumb" id="t-cost" role="img" aria-label="Monetary damages a year in millions, from 90% less to twice the water"></div>
+      <div class="thumb" id="t-cost" role="img" aria-label="Economic damages a year in millions, from 90% less to twice the water"></div>
       <div class="tag">Economics</div>
-      <h3>River flow and economic costs</h3>
-      <p>The monetary damages from that modeled mortality each year, over a decade, and per resident, using the US Environmental Protection Agency's (EPA's) value of a statistical life and its range, in 2015 inflation-adjusted terms.</p>
+      <h3>River flow and economic damages</h3>
+      <p>The economic damages from that modeled mortality each year, over a decade, and per resident, using the US Environmental Protection Agency's (EPA's) value of a statistical life and its range, in 2015 inflation-adjusted terms.</p>
       <a class="go" href="costs.html">Open tool</a>
     </div>
   </div>
@@ -69,7 +69,7 @@
   <div class="facts" id="facts">
     <div class="fact"><div class="v" id="f-dc">&hellip;</div><div class="l">micrograms per cubic meter (&micro;g/m&sup3;) of PM<sub>10</sub> kept out of the air the Albuquerque area breathes, on a typical day</div></div>
     <div class="fact"><div class="v" id="f-d">&hellip;</div><div class="l">modeled mortality from all-causes avoided each year in Bernalillo and Sandoval counties</div></div>
-    <div class="fact"><div class="v" id="f-v">&hellip;</div><div class="l">a year in avoided monetary damages from modeled mortality, at the US EPA's value of a statistical life, in 2015 inflation-adjusted terms</div></div>
+    <div class="fact"><div class="v" id="f-v">&hellip;</div><div class="l">a year in avoided economic damages from modeled mortality, at the US EPA's value of a statistical life, in 2015 inflation-adjusted terms</div></div>
     <div class="fact"><div class="v" id="f-n">&hellip;</div><div class="l">days of river flow, wind, PM<sub>10</sub>, and mortality records behind every calculation</div></div>
   </div>
 
@@ -80,7 +80,7 @@
 
     <details>
       <summary>How the tools calculate the results</summary>
-      <p>The results are obtained from a causally identified econometric model of the effect of Rio Grande river flows on downwind monitored PM<sub>10</sub> that accounts for any confounding effects of weather (daily temperature, same-day and recent precipitation, and wind speed), seasonality, and unobserved heterogeneity, through fixed effects for each monitor in each calendar month, which absorb everything that differs between monitors and across the seasons at each monitor, and fixed effects for each month of each year, which absorb everything shared across the region in a given month, such as regional drought, dust from far away, and wildfire smoke. Every number the tools use, from the regression coefficient to the daily river flows, downwind hours, PM<sub>10</sub>, and baseline mortality, is written by the study's replication code. Every scenario is set at the Central Avenue gauge in Albuquerque, and on each day the other three reaches move in the same proportion. That setting is for these public tools only, so you can change one familiar flow and see what follows. It is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. Your browser applies the same four equations the study does: the scenario's change in flow, the change in PM<sub>10</sub> that follows, the change in modeled mortality, and its monetary damages. The 95% intervals come from the same 2,000 joint draws of the regression coefficient and the mortality coefficients that the replication code writes. A test in this repository recomputes every scenario the replication code reports and checks that the browser matches it.</p>
+      <p>The results are obtained from a causally identified econometric model of the effect of Rio Grande river flows on downwind monitored PM<sub>10</sub> that accounts for any confounding effects of weather (daily temperature, same-day and recent precipitation, and wind speed), seasonality, and unobserved heterogeneity, through fixed effects for each monitor in each calendar month, which absorb everything that differs between monitors and across the seasons at each monitor, and fixed effects for each month of each year, which absorb everything shared across the region in a given month, such as regional drought, dust from far away, and wildfire smoke. Every number the tools use, from the regression coefficient to the daily river flows, downwind hours, PM<sub>10</sub>, and baseline mortality, is written by the study's replication code. Every scenario is set at the Central Avenue gauge in Albuquerque, and on each day the other three reaches move in the same proportion. That setting is for these public tools only, so you can change one familiar flow and see what follows. It is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. Your browser applies the same four equations the study does: the scenario's change in flow, the change in PM<sub>10</sub> that follows, the change in modeled mortality, and its economic damages. The 95% intervals come from the same 2,000 joint draws of the regression coefficient and the mortality coefficients that the replication code writes. A test in this repository recomputes every scenario the replication code reports and checks that the browser matches it.</p>
     </details>
     <details>
       <summary>What the tools do not show</summary>
@@ -95,7 +95,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div>
-      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab (EEHL), University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
       <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
       <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
       <p><strong>This work and its results may not be used or shared without proper citation:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>Flow in the Middle Rio Grande and Particulate Air Pollution in the Albuquerque Area</em>. Working paper, Department of Economics, University of New Mexico.</p>
@@ -181,12 +181,12 @@ function drawThumbs(M) {
   const c = M.central({ type: "percent", value: -0.1 });
   thumbSVG(document.getElementById("t-mort"), { kind: "bars", x: c.years, y: c.years.map(y => c.byYear[y].all), color: col("--blue"),
     every: 3, fy: v => minus(+v.toFixed(2)), xlab: "Year, with 10% less river flow", ylab: "Additional modeled\nmortality" });
-  /* Tool 3: annual cost across the change-in-flow slider */
+  /* Tool 3: annual economic damages across the change-in-flow slider */
   const pc = [], cost = [];
   for (let v = -90; v <= 100; v += 5) { pc.push(v); cost.push(M.central({ type: "percent", value: v / 100 }).deathsYr.all * M.vsl.central / 1e6); }
   thumbSVG(document.getElementById("t-cost"), { kind: "line", x: pc, y: cost, color: col("--gray"), xf: v => v,
     xticks: [-90, -50, 0, 50, 100], fx: v => (v > 0 ? "+" : "") + minus(v) + "%", fy: v => minus("$" + (+v.toFixed(1))).replace("$−", "−$").replace("$-", "−$"),
-    dot: [-10, cost[pc.indexOf(-10)]], xlab: "Change in river flow", ylab: "Cost ($ million/yr)" });
+    dot: [-10, cost[pc.indexOf(-10)]], xlab: "Change in river flow", ylab: "Economic damages\n($ million/yr)" });
 }
 </script>
 </body>

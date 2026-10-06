@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>River Flow and Economic Costs</title>
-<meta name="description" content="The monetary damages from short-term modeled mortality from PM₁₀ that follows changes in Middle Rio Grande river flow.">
+<title>River Flow and Economic Damages</title>
+<meta name="description" content="The economic damages from short-term modeled mortality from PM₁₀ that follows changes in Middle Rio Grande river flow.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,13 +17,13 @@
   <div class="wrap">
     <a class="brand" href="index.html">
       <img src="assets/lab-mark.png" alt="">
-      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab</span></span>
+      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab (EEHL)</span></span>
     </a>
     <nav class="nav" aria-label="Tools">
       <a href="index.html">Overview</a>
       <a href="pm10.html">River flow and PM<sub>10</sub></a>
-      <a href="mortality.html">Mortality</a>
-      <a href="costs.html" aria-current="page">Economic costs</a>
+      <a href="mortality.html">Human Mortality</a>
+      <a href="costs.html" aria-current="page">Economic Damages</a>
     </nav>
   </div>
 </header>
@@ -31,8 +31,8 @@
 <section class="hero">
   <div class="wrap">
     <div class="eyebrow">Tool 3 of 3</div>
-    <h1>River Flow and Economic Costs</h1>
-    <p class="lede">The monetary damages from the modeled mortality in the mortality tool. Choose a change in the river and a value of a statistical life, and see the cost a year, over a decade, and per resident of Bernalillo and Sandoval counties. All monetary estimates are in 2015 inflation-adjusted terms.</p>
+    <h1>River Flow and Economic Damages</h1>
+    <p class="lede">The economic damages from the modeled mortality in the mortality tool. Choose a change in the river and a value of a statistical life, and see the economic damages each year, over a decade, and per resident of Bernalillo and Sandoval counties. All monetary estimates are in 2015 inflation-adjusted terms.</p>
   </div>
 </section>
 
@@ -63,12 +63,12 @@
       <div class="busy" id="busy"></div>
       <div class="panel chart">
         <h3>By year</h3>
-        <div class="sub">Monetary damages from the change in modeled mortality in each calendar year of 2015 to 2024, in millions, 2015 inflation-adjusted</div>
+        <div class="sub">Economic damages from the change in modeled mortality in each calendar year of 2015 to 2024, in millions, 2015 inflation-adjusted</div>
         <div id="c1"></div>
       </div>
       <div class="panel chart">
         <h3>How the answer moves with the scenario</h3>
-        <div class="sub">Monetary damages a year across the slider's range, in millions, 2015 inflation-adjusted</div>
+        <div class="sub">Economic damages a year across the slider's range, in millions, 2015 inflation-adjusted</div>
         <div id="c2"></div>
       </div>
     </div>
@@ -82,7 +82,7 @@
     </details>
     <details>
       <summary>What is not included</summary>
-      <p>Only short-term mortality from PM<sub>10</sub> is valued. Hospital admissions, emergency visits, lost work and school days, long-term mortality, and the effects of fine particulate matter (PM<sub>2.5</sub>) are not counted, so these are lower bounds on the cost.</p>
+      <p>Only short-term mortality from PM<sub>10</sub> is valued. Hospital admissions, emergency visits, lost work and school days, long-term mortality, and the effects of fine particulate matter (PM<sub>2.5</sub>) are not counted, so these are lower bounds on the economic damages.</p>
     </details>
   </div>
 </main>
@@ -90,7 +90,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div>
-      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab (EEHL), University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
       <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
       <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
       <p><strong>This work and its results may not be used or shared without proper citation:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>Flow in the Middle Rio Grande and Particulate Air Pollution in the Albuquerque Area</em>. Working paper, Department of Economics, University of New Mexico.</p>
@@ -125,8 +125,8 @@
     const c = M.central(sc), e = $("ep").value, V = M.vsl[vslSel.value];
     const yr = c.deathsYr[e] * V;
     $("v-yr").textContent = F.money(yr);
-    $("v-yr-s").textContent = (sc.type === "reference" ? (yr >= 0 ? "in monetary damages the river avoids" : "in added monetary damages")
-                                                      : (yr >= 0 ? "in added monetary damages" : "in monetary damages avoided")) +
+    $("v-yr-s").textContent = (sc.type === "reference" ? (yr >= 0 ? "in economic damages the river avoids" : "in added economic damages")
+                                                      : (yr >= 0 ? "in added economic damages" : "in economic damages avoided")) +
                               "; modeled mortality of " + F.minus(F.deaths(c.deathsYr[e])) + " a year";
     $("v-yr-ci").textContent = "";
     $("v-dec").textContent = F.money(yr * 10);
@@ -135,17 +135,17 @@
     $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
     const what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
-      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed avoided about ${F.money(Math.abs(yr))} a year in monetary damages from ${NAMES[e]} mortality over 2015 to 2024.`
-      : `With ${what}, modeled mortality from ${NAMES[e]} in Bernalillo and Sandoval counties would ${yr >= 0 ? "add" : "avoid"} about ${F.money(Math.abs(yr))} a year in monetary damages.`;
+      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed avoided about ${F.money(Math.abs(yr))} a year in economic damages from ${NAMES[e]} mortality over 2015 to 2024.`
+      : `With ${what}, modeled mortality from ${NAMES[e]} in Bernalillo and Sandoval counties would ${yr >= 0 ? "add" : "avoid"} about ${F.money(Math.abs(yr))} a year in economic damages.`;
     RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y][e] * V / 1e6),
       fmt: v => F.minus(v.toFixed(v === 0 ? 0 : Math.abs(v) < 1 ? 2 : 1)), fmtAxis: v => F.minus(String(+v.toFixed(2))),
-      ylabel: "Monetary damages, millions", aria: "Monetary damages by year" });
+      ylabel: "Economic damages, millions", aria: "Economic damages by year" });
     if (ctl) {
       const g = ctl.grid();
       const xs = g.raw, ys = xs.map(r => M.central({ type: g.type, value: g.toValue(r) }).deathsYr[e] * V / 1e6);
-      RGCharts.line($("c2"), { x: xs, y: ys, xlabel: RGUI.TYPES[g.type].label, ylabel: "Monetary damages a year, millions",
+      RGCharts.line($("c2"), { x: xs, y: ys, xlabel: RGUI.TYPES[g.type].label, ylabel: "Economic damages a year, millions",
         fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(1))),
-        marker: { x: raw, y: yr / 1e6, label: F.money(yr) }, aria: "Monetary damages across the scenario range" });
+        marker: { x: raw, y: yr / 1e6, label: F.money(yr) }, aria: "Economic damages across the scenario range" });
     }
     slow(sc);
   }

@@ -17,13 +17,13 @@
   <div class="wrap">
     <a class="brand" href="index.html">
       <img src="assets/lab-mark.png" alt="">
-      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab</span></span>
+      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab (EEHL)</span></span>
     </a>
     <nav class="nav" aria-label="Tools">
       <a href="index.html">Overview</a>
       <a href="pm10.html" aria-current="page">River flow and PM<sub>10</sub></a>
-      <a href="mortality.html">Mortality</a>
-      <a href="costs.html">Economic costs</a>
+      <a href="mortality.html">Human Mortality</a>
+      <a href="costs.html">Economic Damages</a>
     </nav>
   </div>
 </header>
@@ -108,7 +108,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div>
-      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab (EEHL), University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
       <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
       <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
       <p><strong>This work and its results may not be used or shared without proper citation:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>Flow in the Middle Rio Grande and Particulate Air Pollution in the Albuquerque Area</em>. Working paper, Department of Economics, University of New Mexico.</p>
@@ -194,8 +194,8 @@
     $("warn2").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
     const what = RGUI.describe(sc, raw);
     $("sum2").textContent = sc.type === "reference"
-      ? `Compared with ${what.replace("the river as it actually flowed, compared with ", "")}, the river as it actually flowed kept an average of ${Math.abs(c.dCmean).toFixed(3)} µg/m³ of PM₁₀ out of the air the Albuquerque area breathes, every day of 2015 to 2024.`
-      : `Under ${what}, the air the Albuquerque area breathes would have carried ${Math.abs(c.dCmean).toFixed(3)} µg/m³ ${c.dCmean >= 0 ? "more" : "less"} PM₁₀ on an average day of 2015 to 2024.`;
+      ? `Compared with ${what.replace("the river as it actually flowed, compared with ", "")}, the river as it actually flowed kept an average of ${Math.abs(c.dCmean).toFixed(3)} µg/m³ (${Math.abs(100 * c.dCmean / avgPM).toFixed(2)}%) of PM₁₀ out of the air the Albuquerque area breathes, every day of 2015 to 2024.`
+      : `Under ${what}, the air the Albuquerque area breathes would have carried ${Math.abs(c.dCmean).toFixed(3)} µg/m³ (${Math.abs(100 * c.dCmean / avgPM).toFixed(2)}%) ${c.dCmean >= 0 ? "more" : "less"} PM₁₀ on an average day of 2015 to 2024.`;
     RGCharts.bars($("c2"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].dCmean),
       fmt: v => F.minus(v.toFixed(3)), fmtAxis: v => F.minus(+v.toFixed(3)), ylabel: "µg/m³",
       aria: "Average change in PM₁₀ by year" });
