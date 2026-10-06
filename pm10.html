@@ -41,14 +41,15 @@
   <div class="tool">
     <div class="panel controls">
       <h3>Set the day</h3>
-      <div class="ctl"><label for="qnow">Flow at the Central Avenue gauge now <output id="o-qnow"></output></label>
+      <div class="ctl"><label for="qnow">Baseline flow at the Central Avenue gauge <output id="o-qnow"></output></label>
         <input id="qnow" type="range" min="0" max="1000" step="1">
-        <div class="hint">The river flow measured at the Central Avenue gauge in Albuquerque, in cubic feet per second (cfs).</div></div>
-      <div class="ctl"><label for="qnew">Flow at the Central Avenue gauge in the scenario <output id="o-qnew"></output></label>
-        <input id="qnew" type="range" min="0" max="1000" step="1"></div>
+        <div class="hint">The starting point: the flow the river is carrying at the Central Avenue gauge in Albuquerque, in cubic feet per second (cfs).</div></div>
+      <div class="ctl"><label for="qnew">Scenario flow to compare <output id="o-qnew"></output></label>
+        <input id="qnew" type="range" min="0" max="1000" step="1">
+        <div class="hint">The flow you want to test against the baseline, also at the Central Avenue gauge. The results show the change from the baseline to this flow.</div></div>
       <div class="ctl"><label for="hrs">Hours the wind blows off the river <output id="o-hrs"></output></label>
         <input id="hrs" type="range" min="0" max="24" step="1" value="24">
-        <div class="hint">24 is a full day downwind of the channel.</div></div>
+        <div class="hint">24 hours is a full day downwind of the channel.</div></div>
       <div class="ctl"><label for="mon">Month</label>
         <select id="mon"></select></div>
       <div class="ctl"><label for="base"><span>PM<sub>10</sub> on an ordinary day</span> <output id="o-base"></output></label>
@@ -58,9 +59,9 @@
     </div>
     <div class="results">
       <p class="summary" id="sum1"></p>
-      <div class="stats">
+      <div class="stats even-k">
         <div class="stat primary"><div class="k">Change in PM<sub>10</sub></div><div class="v" id="s-pct"></div><div class="s" id="s-pct-ci"></div></div>
-        <div class="stat"><div class="k">In <span class="unit">&micro;g/m&sup3;</span></div><div class="v" id="s-ug"></div><div class="s" id="s-ug-ci"></div></div>
+        <div class="stat"><div class="k">Micrograms per cubic meter (<span class="unit">&micro;g/m&sup3;</span>)</div><div class="v" id="s-ug"></div><div class="s" id="s-ug-ci"></div></div>
         <div class="stat"><div class="k">PM<sub>10</sub> that day</div><div class="v" id="s-lvl"></div><div class="s" id="s-lvl-s"></div></div>
       </div>
       <div class="panel chart">
