@@ -123,3 +123,6 @@ table.small th, table.small td { text-align: left; padding: 6px 8px; border-bott
   .facts { grid-template-columns: 1fr; }
   .site-footer .wrap { grid-template-columns: 1fr; }
 }
+
+/* chemical subscripts (PM10) that do not disturb line spacing */
+sub { font-size: 0.72em; line-height: 0; position: relative; vertical-align: baseline; bottom: -0.28em; }
