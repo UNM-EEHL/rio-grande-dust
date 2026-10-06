@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 2 of 3</div>
     <h1>River Flow and Human Mortality</h1>
-    <p class="lede">Choose a change in the Rio Grande and see how much more, or less, human mortality Bernalillo and Sandoval counties would have each year from the PM<sub>10</sub> that follows, from all-causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew.</p>
+    <p class="lede">Choose a change in the Rio Grande and see how much human mortality in Bernalillo and Sandoval counties would rise or fall each year from the PM<sub>10</sub> that follows, from all-causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew.</p>
   </div>
 </section>
 
@@ -121,8 +121,8 @@
     $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
     const a = c.deathsYr.all, what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
-      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} mortality per year from all-causes in Bernalillo and Sandoval counties over 2015 to 2024.`
-      : `With ${what}, Bernalillo and Sandoval counties would have about ${F.deaths(Math.abs(a))} ${a >= 0 ? "more" : "less"} mortality per year from all-causes.`;
+      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} instances of mortality per year from all-causes in Bernalillo and Sandoval counties over 2015 to 2024.`
+      : `With ${what}, Bernalillo and Sandoval counties would have about ${F.deaths(Math.abs(a))} ${a >= 0 ? "more" : "fewer"} instances of mortality per year from all-causes.`;
     RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].all),
       fmt: v => F.minus(F.deaths(v)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Modeled human mortality, all-causes",
       aria: "All-cause modeled human mortality by year" });
