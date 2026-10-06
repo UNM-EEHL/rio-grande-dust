@@ -60,7 +60,8 @@
       </div>
       <div class="panel chart">
         <h3>How the effect moves with the scenario</h3>
-        <div class="sub">All-cause modeled human mortality per year across the slider's range, with the 95% interval at the current setting</div>
+        <div class="sub">All-cause human mortality per year across the slider's range; the shaded band is the 95% interval</div>
+        <div class="busy" id="band"></div>
         <div id="c2"></div>
       </div>
     </div>
@@ -129,13 +130,52 @@
       fmt: v => F.minus(F.deaths(v)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Modeled human mortality, all-causes",
       aria: "All-cause modeled human mortality by year" });
     const g = ctl ? ctl.grid() : null;
-    if (g) {
-      const xs = g.raw, ys = xs.map(r => M.central({ type: g.type, value: g.toValue(r) }).deathsYr.all);
-      RGCharts.line($("c2"), { x: xs, y: ys, xlabel: RGUI.TYPES[g.type].label, ylabel: "Modeled human mortality per year, all-causes",
-        fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(2))),
-        marker: { x: raw, y: a, label: F.minus(F.deaths(a)) }, aria: "Modeled human mortality across the scenario range" });
-    }
+    if (g) { cur2 = { g, raw, a }; drawC2(); }
     slow(sc);
+  }
+  /* The second chart's 95% band: the all-cause interval across the 2,000 joint draws at
+     each point of the slider's range. It depends only on the scenario type, so it is
+     computed once per type, a few points at a time so the page stays responsive. */
+  let cur2 = null;
+  const bands = {}, busyBand = {};
+  function ciAll(sc) {
+    const dE = M.exposure(sc), D = M.D, K = M.draws.bE.length, idx = [];
+    for (let t = 0; t < D.n; t++) if (Number.isFinite(D.pm10[t])) idx.push(t);
+    const out = new Float64Array(K), y0 = D.y0.all;
+    for (let k = 0; k < K; k++) {
+      const bE = M.draws.bE[k], b = M.draws.all[k];
+      let s = 0;
+      for (let i = 0; i < idx.length; i++) { const t = idx[i]; s += y0[t] * (Math.exp(b * D.pm10[t] * (Math.exp(bE * dE[t]) - 1)) - 1); }
+      out[k] = s / idx.length * 365.25;
+    }
+    out.sort();
+    return [out[Math.floor(0.025 * K) - 1], out[Math.ceil(0.975 * K) - 1]];
+  }
+  function drawC2() {
+    const { g, raw, a } = cur2, B = bands[g.type];
+    const xs = B ? B.xs : g.raw;
+    const ys = B ? B.ys : xs.map(r => M.central({ type: g.type, value: g.toValue(r) }).deathsYr.all);
+    RGCharts.line($("c2"), { x: xs, y: ys, lo: B ? B.lo : undefined, hi: B ? B.hi : undefined,
+      xlabel: RGUI.TYPES[g.type].label, ylabel: "Modeled human mortality per year, all-causes",
+      fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(2))),
+      marker: { x: raw, y: a, label: F.minus(F.deaths(a)) }, aria: "Modeled human mortality across the scenario range" });
+    if (!B && !busyBand[g.type]) buildBand(g);
+  }
+  function buildBand(g) {
+    busyBand[g.type] = true;
+    const xs = g.raw.filter((v, i) => i % 2 === 0 || i === g.raw.length - 1);
+    const ys = [], lo = [], hi = [];
+    let i = 0;
+    $("band").textContent = "Computing the 95% interval band…";
+    (function step() {
+      const r = xs[i], sc = { type: g.type, value: g.toValue(r) };
+      ys.push(M.central(sc).deathsYr.all);
+      const ci = ciAll(sc); lo.push(ci[0]); hi.push(ci[1]);
+      i++;
+      if (i < xs.length) { setTimeout(step, 0); return; }
+      bands[g.type] = { xs, ys, lo, hi };
+      if (cur2 && cur2.g.type === g.type) { $("band").textContent = ""; drawC2(); }
+    })();
   }
   ctl = RGUI.scenarioControls($("sc"), (sc, raw) => render(sc, raw));
   { const c0 = ctl.current(); render(c0.sc, c0.raw); }
