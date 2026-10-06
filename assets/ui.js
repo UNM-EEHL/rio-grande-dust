@@ -90,6 +90,7 @@
     setType(type, opts.value);
     return {
       current, TYPES,
+      reset() { setType(opts.type || "percent", opts.value); },
       grid() {   /* slider values for the response curve */
         const T = TYPES[type], out = [];
         const steps = 40;
