@@ -1,4 +1,4 @@
-River Flow, Dust, and Health on the Middle Rio Grande: interactive tools
+River Flow, Dust, and Human Health on the Middle Rio Grande: interactive tools
 Environmental Economics and Health Lab, University of New Mexico
 
 What this is
