@@ -56,9 +56,9 @@
     <div class="results">
       <p class="summary" id="sum"></p>
       <div class="stats">
-        <div class="stat primary"><div class="k">A year</div><div class="v" id="v-yr"></div><div class="s" id="v-yr-s"></div><div class="s" id="v-yr-ci"></div></div>
+        <div class="stat primary"><div class="k">Per Year</div><div class="v" id="v-yr"></div><div class="s" id="v-yr-s"></div><div class="s" id="v-yr-ci"></div></div>
         <div class="stat"><div class="k">Over a decade</div><div class="v" id="v-dec"></div><div class="s">ten years at the annual rate</div></div>
-        <div class="stat"><div class="k">Per resident, a year</div><div class="v" id="v-pc"></div><div class="s" id="v-pc-s"></div></div>
+        <div class="stat"><div class="k">Per Resident, Per Year</div><div class="v" id="v-pc"></div><div class="s" id="v-pc-s"></div></div>
       </div>
       <div class="busy" id="busy"></div>
       <div class="panel chart">
@@ -68,7 +68,8 @@
       </div>
       <div class="panel chart">
         <h3>How the answer moves with the scenario</h3>
-        <div class="sub">Economic damages a year across the slider's range, in millions of 2015 inflation-adjusted US dollars</div>
+        <div class="sub">Economic damages per year across the slider's range, in millions of 2015 inflation-adjusted US dollars; the shaded band is the 95% interval</div>
+        <div class="busy" id="band"></div>
         <div id="c2"></div>
       </div>
     </div>
@@ -140,19 +141,58 @@
     const what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
       ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed avoided about ${F.money(Math.abs(yr))} a year in economic damages from ${NAMES[e]} mortality over 2015 to 2024.`
-      : `With ${what}, modeled mortality from ${NAMES[e]} in Bernalillo and Sandoval counties would ${yr >= 0 ? "be associated with" : "avoid"} about ${F.money(Math.abs(yr))} a year in economic damages due to PM₁₀ exposure.`;
+      : `With ${what}, modeled mortality from ${NAMES[e]} in Bernalillo and Sandoval counties would ${yr >= 0 ? "be associated with" : "avoid"} about ${F.money(Math.abs(yr))} a year in economic damages due to PM₁₀ exposure from exposed Rio Grande river bed.`;
     $("c1sub").innerHTML = `Economic damages associated with the change in ${LBL[e]} mortality due to PM<sub>10</sub> exposure from the Rio Grande river bed over 2015-2024, in millions of 2015 inflation-adjusted US dollars`;
     RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y][e] * V / 1e6),
       fmt: v => F.minus(v.toFixed(v === 0 ? 0 : Math.abs(v) < 1 ? 2 : 1)), fmtAxis: v => F.minus(String(+v.toFixed(2))),
       ylabel: "Economic damages, millions", aria: "Economic damages by year" });
-    if (ctl) {
-      const g = ctl.grid();
-      const xs = g.raw, ys = xs.map(r => M.central({ type: g.type, value: g.toValue(r) }).deathsYr[e] * V / 1e6);
-      RGCharts.line($("c2"), { x: xs, y: ys, xlabel: RGUI.TYPES[g.type].label, ylabel: "Economic damages a year, millions",
-        fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(1))),
-        marker: { x: raw, y: yr / 1e6, label: F.money(yr) }, aria: "Economic damages across the scenario range" });
-    }
+    if (ctl) { cur2 = { g: ctl.grid(), raw, yr, e, V }; drawC2(); }
     slow(sc);
+  }
+  /* The second chart's 95% band: the interval in modeled mortality across the 2,000 joint
+     draws at each point of the slider's range, times the chosen value of a statistical life.
+     It depends on the scenario type and the cause, so it is computed once for each pair,
+     a few points at a time so the page stays responsive. */
+  let cur2 = null;
+  const bands = {}, busyBand = {};
+  function ciEnd(sc, e) {
+    const dE = M.exposure(sc), D = M.D, K = M.draws.bE.length, idx = [];
+    for (let t = 0; t < D.n; t++) if (Number.isFinite(D.pm10[t])) idx.push(t);
+    const out = new Float64Array(K), y0 = D.y0[e];
+    for (let k = 0; k < K; k++) {
+      const bE = M.draws.bE[k], b = M.draws[e][k];
+      let s = 0;
+      for (let i = 0; i < idx.length; i++) { const t = idx[i]; s += y0[t] * (Math.exp(b * D.pm10[t] * (Math.exp(bE * dE[t]) - 1)) - 1); }
+      out[k] = s / idx.length * 365.25;
+    }
+    out.sort();
+    return [out[Math.floor(0.025 * K) - 1], out[Math.ceil(0.975 * K) - 1]];
+  }
+  function drawC2() {
+    const { g, raw, yr, e, V } = cur2, key = g.type + "|" + e, B = bands[key], f = V / 1e6;
+    const xs = B ? B.xs : g.raw;
+    const ys = (B ? B.ys : xs.map(r => M.central({ type: g.type, value: g.toValue(r) }).deathsYr[e])).map(v => v * f);
+    RGCharts.line($("c2"), { x: xs, y: ys, lo: B ? B.lo.map(v => v * f) : undefined, hi: B ? B.hi.map(v => v * f) : undefined,
+      xlabel: RGUI.TYPES[g.type].label, ylabel: "Economic damages per year, millions",
+      fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(1))),
+      marker: { x: raw, y: yr / 1e6, label: F.money(yr) }, aria: "Economic damages across the scenario range" });
+    if (!B && !busyBand[key]) buildBand(g, e, key);
+  }
+  function buildBand(g, e, key) {
+    busyBand[key] = true;
+    const xs = g.raw.filter((v, i) => i % 2 === 0 || i === g.raw.length - 1);
+    const ys = [], lo = [], hi = [];
+    let i = 0;
+    $("band").textContent = "Computing the 95% interval band…";
+    (function step() {
+      const sc = { type: g.type, value: g.toValue(xs[i]) };
+      ys.push(M.central(sc).deathsYr[e]);
+      const ci = ciEnd(sc, e); lo.push(ci[0]); hi.push(ci[1]);
+      i++;
+      if (i < xs.length) { setTimeout(step, 0); return; }
+      bands[key] = { xs, ys, lo, hi };
+      if (cur2 && cur2.g.type + "|" + cur2.e === key) { $("band").textContent = ""; drawC2(); }
+    })();
   }
   ctl = RGUI.scenarioControls($("sc"), (sc, raw) => render(sc, raw));
   { const c0 = ctl.current(); render(c0.sc, c0.raw); }
