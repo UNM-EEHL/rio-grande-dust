@@ -54,7 +54,7 @@
       <div class="busy" id="busy"></div>
       <p class="note">Cardiovascular and respiratory mortality are part of the all-cause total, not in addition to it. Positive numbers are additional mortality; negative numbers are mortality avoided.</p>
       <div class="panel chart">
-        <h3>All-cause modeled human mortality by year</h3>
+        <h3>All-cause human mortality by year (modeled)</h3>
         <div class="sub">Under the scenario, each calendar year of 2015 to 2024</div>
         <div id="c1"></div>
       </div>
@@ -99,9 +99,11 @@
   const M = await RGModel.load("data/");
   const F = RGUI.fmt, $ = id => document.getElementById(id);
   let ctl = null, lastCI = null;
-  function verdict(sc, x) {
-    if (sc.type === "reference") return x >= 0 ? "modeled mortality per year the river prevents" : "more modeled mortality per year than the comparison river";
-    return x >= 0 ? "additional modeled mortality per year" : "modeled mortality avoided per year";
+  const LBL = { all: "all-cause", cvd: "cardiovascular", resp: "respiratory" };
+  function verdict(sc, x, e) {
+    const L = LBL[e];
+    if (sc.type === "reference") return x >= 0 ? `modeled ${L} mortality per year the river prevents` : `more modeled ${L} mortality per year than the comparison river`;
+    return x >= 0 ? `additional modeled ${L} mortality per year` : `modeled ${L} mortality avoided per year`;
   }
   function showCI(ci) {
     for (const e of M.ENDPOINTS)
@@ -115,7 +117,7 @@
     const c = M.central(sc);
     for (const e of M.ENDPOINTS) {
       $("d-" + e).textContent = F.minus(F.deaths(c.deathsYr[e]));
-      $("d-" + e + "-s").textContent = verdict(sc, c.deathsYr[e]);
+      $("d-" + e + "-s").textContent = verdict(sc, c.deathsYr[e], e);
       $("d-" + e + "-ci").textContent = "";
     }
     $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
