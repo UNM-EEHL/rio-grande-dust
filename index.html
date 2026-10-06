@@ -51,40 +51,40 @@
       <div class="thumb" id="t-mort" role="img" aria-label="Additional modeled mortality by year, 2015 to 2024, with 10% less water"></div>
       <div class="tag">Health</div>
       <h3>River flow and mortality</h3>
-      <p>The annual mortality from all causes, from cardiovascular disease, and from respiratory disease that follows from a change in river flow, a low-flow floor, or a drier climate, with 95% intervals.</p>
+      <p>The annual mortality from all-causes, from cardiovascular disease, and from respiratory disease that follows from a change in river flow, a low-flow floor, or a drier climate, with 95% intervals.</p>
       <a class="go" href="mortality.html">Open tool</a>
     </div>
     <div class="card c-gray">
-      <div class="thumb" id="t-cost" role="img" aria-label="Cost a year in millions of dollars, from 90% less to twice the water"></div>
+      <div class="thumb" id="t-cost" role="img" aria-label="Monetary damages a year in millions, from 90% less to twice the water"></div>
       <div class="tag">Economics</div>
       <h3>River flow and economic costs</h3>
-      <p>What that modeled mortality is worth in dollars a year, over the decade, and per resident, at the US Environmental Protection Agency's value of a statistical life and its range.</p>
+      <p>The monetary damages from that modeled mortality a year, over the decade, and per resident, at the US Environmental Protection Agency's (EPA's) value of a statistical life and its range, in 2015 inflation-adjusted terms.</p>
       <a class="go" href="costs.html">Open tool</a>
     </div>
   </div>
 
 
-  <h2>What the river is worth today</h2>
-  <p class="note">Compared with a river that is essentially dry (1 cfs at the Central Avenue gauge), over 2015 to 2024, computed live in your browser from the study's results.</p>
+  <h2>The damages the river avoids today</h2>
+  <p class="note">Compared with a Rio Grande that is essentially dry (1 cubic feet per second (cfs) of flow at the Central Avenue gauge), over 2015-2024.</p>
   <div class="facts" id="facts">
     <div class="fact"><div class="v" id="f-dc">&hellip;</div><div class="l">micrograms per cubic meter (&micro;g/m&sup3;) of PM<sub>10</sub> kept out of the air the Albuquerque area breathes, on a typical day</div></div>
-    <div class="fact"><div class="v" id="f-d">&hellip;</div><div class="l">modeled mortality from all causes avoided each year in Bernalillo and Sandoval counties</div></div>
-    <div class="fact"><div class="v" id="f-v">&hellip;</div><div class="l">a year in avoided mortality, at the US Environmental Protection Agency's value of a statistical life</div></div>
+    <div class="fact"><div class="v" id="f-d">&hellip;</div><div class="l">modeled mortality from all-causes avoided each year in Bernalillo and Sandoval counties</div></div>
+    <div class="fact"><div class="v" id="f-v">&hellip;</div><div class="l">a year in avoided monetary damages from modeled mortality, at the US EPA's value of a statistical life, in 2015 inflation-adjusted terms</div></div>
     <div class="fact"><div class="v" id="f-n">&hellip;</div><div class="l">days of river flow, wind, PM<sub>10</sub>, and mortality records behind every calculation</div></div>
   </div>
 
   <div class="prose">
     <h2>About this project</h2>
-    <p>The study follows the Middle Rio Grande from Cochiti Dam to the Isleta Diversion Dam, 64.6 miles of channel in four reaches, each with its own US Geological Survey stream gauge. Daily PM<sub>10</sub> comes from the seven regulatory monitors in the Albuquerque area. For every monitor, reach, and day, the study counts the hours the wind blew from that reach toward that monitor, and asks whether PM<sub>10</sub> rises more on those hours when the reach is carrying less water. It does, and the estimate rests on hours when the wind actually blew off the river, not on how close a monitor happens to be.</p>
-    <p>The change in PM<sub>10</sub> is then carried into short-term mortality with the concentration-response functions of Liu and coauthors (2019), using monthly baseline mortality counts for Bernalillo and Sandoval counties, and valued at the US Environmental Protection Agency's value of a statistical life in 2015 dollars.</p>
+    <p>The study follows the Middle Rio Grande from Cochiti Dam to the Isleta Diversion Dam, 64.6 miles of channel in four reaches, each with its own US Geological Survey stream gauge. Daily PM<sub>10</sub> comes from the seven US EPA regulatory monitors in the Albuquerque area. For every monitor, reach, and day, the study counts the hours the wind blew from that reach toward that monitor, and asks whether PM<sub>10</sub> rises more on those hours when the reach is carrying less water. It does, and the estimate rests on hours when the wind actually blew off the river, not on how close a monitor happens to be.</p>
+    <p>The change in PM<sub>10</sub> is then carried into short-term mortality with the concentration-response functions of Liu and coauthors (2019), using monthly baseline mortality counts for Bernalillo and Sandoval counties, and valued at the US EPA's value of a statistical life, with all monetary estimates in 2015 inflation-adjusted terms.</p>
 
     <details>
-      <summary>How the tools calculate</summary>
-      <p>Every number the tools use, from the regression coefficient to the daily river flows, downwind hours, PM<sub>10</sub>, and baseline mortality, is written by the study's replication code. Every scenario is set at the Central Avenue gauge in Albuquerque, and on each day the other three reaches move in the same proportion. That setting is for these public tools only, so you can change one familiar flow and see what follows. It is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. Your browser applies the same four equations the study does: the scenario's change in flow, the change in PM<sub>10</sub> that follows, the change in modeled mortality, and its value. The 95% intervals come from the same 2,000 joint draws of the regression coefficient and the mortality coefficients that the replication code writes. A test in this repository recomputes every scenario the replication code reports and checks that the browser matches it.</p>
+      <summary>How the tools calculate the results</summary>
+      <p>The results are obtained from a causally identified econometric model of the effect of Rio Grande river flows on downwind monitored PM<sub>10</sub> that accounts for any confounding effects of weather (daily temperature, same-day and recent precipitation, and wind speed), seasonality, and unobserved heterogeneity, through fixed effects for each monitor in each calendar month, which absorb everything that differs between monitors and across the seasons at each monitor, and fixed effects for each month of each year, which absorb everything shared across the region in a given month, such as regional drought, dust from far away, and wildfire smoke. Every number the tools use, from the regression coefficient to the daily river flows, downwind hours, PM<sub>10</sub>, and baseline mortality, is written by the study's replication code. Every scenario is set at the Central Avenue gauge in Albuquerque, and on each day the other three reaches move in the same proportion. That setting is for these public tools only, so you can change one familiar flow and see what follows. It is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. Your browser applies the same four equations the study does: the scenario's change in flow, the change in PM<sub>10</sub> that follows, the change in modeled mortality, and its monetary damages. The 95% intervals come from the same 2,000 joint draws of the regression coefficient and the mortality coefficients that the replication code writes. A test in this repository recomputes every scenario the replication code reports and checks that the browser matches it.</p>
     </details>
     <details>
       <summary>What the tools do not show</summary>
-      <p>The results are for short-term (acute) mortality only, all ages, from PM<sub>10</sub> only, with one set of concentration-response functions. Long-term mortality, hospital visits, and fine particulate are not included, so the dollar figures are conservative. The estimate uses same-day river flow, which understates the effect of a bed that has been drying for weeks; the study treats it as a lower bound. Scenarios far outside the flows the river actually carried from 2015 to 2024 are extrapolations.</p>
+      <p>The results are for short-term (acute) mortality only, all ages, from PM<sub>10</sub> only, with one set of concentration-response functions. Long-term mortality, hospital visits, and fine particulate matter (PM<sub>2.5</sub>) are not included, so the monetary estimates are conservative. The estimate uses same-day river flow, which understates the effect of a bed that has been drying for weeks; the study treats it as a lower bound. Scenarios far outside the flows the river actually carried from 2015 to 2024 are extrapolations.</p>
     </details>
 
     <h2>Cite this work</h2>
@@ -95,9 +95,10 @@
 <footer class="site-footer">
   <div class="wrap">
     <div>
-      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency.</p>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
       <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
       <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
+      <p><strong>This work and its results may not be used or shared without citing them:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>Flow in the Middle Rio Grande and Particulate Air Pollution in the Albuquerque Area</em>. Working paper, Department of Economics, University of New Mexico.</p>
     </div>
     <img src="assets/lab-mark.png" alt="Environmental Economics and Health Lab">
   </div>

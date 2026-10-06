@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 2 of 3</div>
     <h1>River Flow and Mortality</h1>
-    <p class="lede">Choose a change in the river and see how much more, or less, modeled mortality Bernalillo and Sandoval counties would have each year from the PM<sub>10</sub> that follows, from all causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew.</p>
+    <p class="lede">Choose a change in the river and see how much more, or less, modeled mortality Bernalillo and Sandoval counties would have each year from the PM<sub>10</sub> that follows, from all-causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew.</p>
   </div>
 </section>
 
@@ -47,7 +47,7 @@
     <div class="results">
       <p class="summary" id="sum"></p>
       <div class="stats">
-        <div class="stat primary"><div class="k">All causes</div><div class="v" id="d-all"></div><div class="s" id="d-all-s"></div><div class="s" id="d-all-ci"></div></div>
+        <div class="stat primary"><div class="k">All-causes</div><div class="v" id="d-all"></div><div class="s" id="d-all-s"></div><div class="s" id="d-all-ci"></div></div>
         <div class="stat"><div class="k">Cardiovascular</div><div class="v" id="d-cvd"></div><div class="s" id="d-cvd-s"></div><div class="s" id="d-cvd-ci"></div></div>
         <div class="stat"><div class="k">Respiratory</div><div class="v" id="d-resp"></div><div class="s" id="d-resp-s"></div><div class="s" id="d-resp-ci"></div></div>
       </div>
@@ -69,12 +69,12 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's monitors, applies the scenario to that day's flow at the Central Avenue gauge, moves the other three reaches in the same proportion, and converts the result into a change in population-weighted PM<sub>10</sub> with the study's headline regression coefficient. The change in PM<sub>10</sub> is carried into modeled mortality with the concentration-response functions of Liu and coauthors (2019), which give 0.44% higher mortality from all causes, 0.36% higher cardiovascular mortality, and 0.47% higher respiratory mortality for each 10 &micro;g/m&sup3; of PM<sub>10</sub>, applied to each month's baseline mortality in the two counties. The annual figure is the daily average times 365.25. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same.</p>
+      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's monitors, applies the scenario to that day's flow at the Central Avenue gauge, moves the other three reaches in the same proportion, and converts the result into a change in population-weighted PM<sub>10</sub> with the study's headline regression coefficient. The change in PM<sub>10</sub> is carried into modeled mortality with the concentration-response functions of Liu and coauthors (2019), which give 0.44% higher mortality from all-causes, 0.36% higher cardiovascular mortality, and 0.47% higher respiratory mortality for each 10 &micro;g/m&sup3; of PM<sub>10</sub>, applied to each month's baseline mortality in the two counties. The annual figure is the daily average times 365.25. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same.</p>
       <p>The 95% interval comes from 2,000 joint draws of the regression coefficient and the three mortality coefficients, written by the study's replication code; the tool reports the 2.5th and 97.5th percentiles across them. The study's own tables use a separate set of 2,000 draws, so intervals here can differ from them in the second decimal; the central estimates match exactly.</p>
     </details>
     <details>
       <summary>What is not included</summary>
-      <p>Only short-term mortality, all ages, from PM<sub>10</sub>. Long-term exposure, hospital visits, asthma, and fine particulate are not counted, so the totals are conservative. The estimate uses same-day river flow, which the study shows understates the effect of a bed that has been drying for weeks.</p>
+      <p>Only short-term mortality, all ages, from PM<sub>10</sub>. Long-term exposure, hospital visits, asthma, and fine particulate matter (PM<sub>2.5</sub>) are not counted, so the totals are conservative. The estimate uses same-day river flow, which the study shows understates the effect of a bed that has been drying for weeks.</p>
     </details>
   </div>
 </main>
@@ -82,9 +82,10 @@
 <footer class="site-footer">
   <div class="wrap">
     <div>
-      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency.</p>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
       <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
       <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
+      <p><strong>This work and its results may not be used or shared without citing them:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>Flow in the Middle Rio Grande and Particulate Air Pollution in the Albuquerque Area</em>. Working paper, Department of Economics, University of New Mexico.</p>
     </div>
     <img src="assets/lab-mark.png" alt="Environmental Economics and Health Lab">
   </div>
@@ -120,15 +121,15 @@
     $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
     const a = c.deathsYr.all, what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
-      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} modeled mortality a year from all causes in Bernalillo and Sandoval counties over 2015 to 2024.`
-      : `With ${what}, Bernalillo and Sandoval counties would have about ${F.deaths(Math.abs(a))} ${a >= 0 ? "more" : "less"} modeled mortality a year from all causes.`;
+      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} modeled mortality a year from all-causes in Bernalillo and Sandoval counties over 2015 to 2024.`
+      : `With ${what}, Bernalillo and Sandoval counties would have about ${F.deaths(Math.abs(a))} ${a >= 0 ? "more" : "less"} modeled mortality a year from all-causes.`;
     RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].all),
-      fmt: v => F.minus(F.deaths(v)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Modeled mortality, all causes",
+      fmt: v => F.minus(F.deaths(v)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Modeled mortality, all-causes",
       aria: "All-cause modeled mortality by year" });
     const g = ctl ? ctl.grid() : null;
     if (g) {
       const xs = g.raw, ys = xs.map(r => M.central({ type: g.type, value: g.toValue(r) }).deathsYr.all);
-      RGCharts.line($("c2"), { x: xs, y: ys, xlabel: RGUI.TYPES[g.type].label, ylabel: "Modeled mortality a year, all causes",
+      RGCharts.line($("c2"), { x: xs, y: ys, xlabel: RGUI.TYPES[g.type].label, ylabel: "Modeled mortality a year, all-causes",
         fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(2))),
         marker: { x: raw, y: a, label: F.minus(F.deaths(a)) }, aria: "Modeled mortality across the scenario range" });
     }

@@ -7,7 +7,7 @@ What this is
   and Robert P. Berrens, 2026, working paper):
 
     pm10.html        river flow and downwind PM10
-    mortality.html   river flow and short-term modeled mortality (all causes,
+    mortality.html   river flow and short-term modeled mortality (all-causes,
                      cardiovascular, respiratory), Bernalillo and Sandoval
                      counties
     costs.html       river flow and the economic cost of that mortality
