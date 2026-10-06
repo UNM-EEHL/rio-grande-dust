@@ -118,9 +118,9 @@ table.small th, table.small td { text-align: left; padding: 6px 8px; border-bott
 /* footer */
 .site-footer { margin-top: 48px; border-top: 1px solid var(--line); background: #fff; }
 .site-footer .wrap { padding-top: 22px; padding-bottom: 28px; font-size: 0.88rem; color: var(--muted); display: grid; grid-template-columns: 1fr auto; gap: 18px; }
-.site-footer img.footer-logo { height: 160px; width: auto; max-width: 100%; justify-self: end; align-self: start; }
-@media (max-width: 920px) { .site-footer img.footer-logo { height: 130px; } }
-@media (max-width: 560px) { .site-footer img.footer-logo { justify-self: start; height: auto; width: 100%; max-width: 340px; } }
+.site-footer img.footer-logo { height: 120px; width: auto; max-width: 100%; justify-self: end; align-self: start; }
+@media (max-width: 920px) { .site-footer img.footer-logo { height: 108px; } }
+@media (max-width: 560px) { .site-footer img.footer-logo { justify-self: start; height: auto; width: 100%; max-width: 290px; } }
 
 @media (max-width: 920px) {
   .cards { grid-template-columns: 1fr; }
