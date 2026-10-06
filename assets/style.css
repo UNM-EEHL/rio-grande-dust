@@ -101,6 +101,8 @@ select { width: 100%; padding: 7px 8px; border: 1px solid var(--line); border-ra
 .chart .sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 8px; }
 .chart svg { width: 100%; height: auto; display: block; }
 .busy { font-size: 0.82rem; color: var(--muted); min-height: 1.2em; }
+.busy:empty { display: none; }
+.results > .note { margin: -8px 0 0; }
 .warn { font-size: 0.86rem; color: var(--maroon-dark); background: #FFF6E6; border: 1px solid #F0DDB8; padding: 8px 10px; border-radius: 6px; display: none; }
 .warn.on { display: block; }
 
