@@ -103,8 +103,8 @@
   const LBL = { all: "all-cause", cvd: "cardiovascular", resp: "respiratory" };
   function verdict(sc, x, e) {
     const L = LBL[e];
-    if (sc.type === "reference") return x >= 0 ? `modeled ${L} mortality per year the river prevents` : `more modeled ${L} mortality per year than the comparison river`;
-    return x >= 0 ? `additional modeled ${L} mortality per year` : `modeled ${L} mortality avoided per year`;
+    if (sc.type === "reference") return x >= 0 ? `${L} mortality (modeled) per year the river prevents` : `more ${L} mortality (modeled) per year than the comparison river`;
+    return x >= 0 ? `additional ${L} mortality (modeled) per year` : `${L} mortality (modeled) avoided per year`;
   }
   function showCI(ci) {
     for (const e of M.ENDPOINTS)
