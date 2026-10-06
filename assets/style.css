@@ -35,7 +35,7 @@ p { margin: 0 0 1rem; }
 .site-header { background: var(--maroon); color: #fff; }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; padding-bottom: 12px; }
 .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; }
-.brand img { width: 44px; height: 44px; border-radius: 50%; background: #fff; }
+.brand img { width: 46px; height: 46px; padding: 4px; box-sizing: border-box; object-fit: contain; border-radius: 50%; background: #fff; flex: none; }
 .brand .b1 { display: block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
 .brand .b2 { display: block; font-family: var(--serif); font-size: 1.05rem; }
 .brand:hover { color: #fff; }
@@ -117,7 +117,7 @@ table.small th, table.small td { text-align: left; padding: 6px 8px; border-bott
 /* footer */
 .site-footer { margin-top: 48px; border-top: 1px solid var(--line); background: #fff; }
 .site-footer .wrap { padding-top: 22px; padding-bottom: 28px; font-size: 0.88rem; color: var(--muted); display: grid; grid-template-columns: 1fr auto; gap: 18px; }
-.site-footer img { width: 56px; height: 56px; }
+.site-footer img { width: 60px; height: 60px; object-fit: contain; }
 
 @media (max-width: 920px) {
   .cards { grid-template-columns: 1fr; }
