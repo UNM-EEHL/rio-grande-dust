@@ -42,7 +42,6 @@
   <div class="cards">
     <div class="card c-maroon">
       <div class="thumb" id="t-pm10" role="img" aria-label="PM₁₀ at one place after a day downwind, as the river falls from 150 cfs"></div>
-      <div class="thumb-cap">PM<sub>10</sub> at one place after a day downwind, as the river falls from 150 cfs</div>
       <div class="tag">Air quality</div>
       <h3>River flow and PM<sub>10</sub></h3>
       <p>How much more PM<sub>10</sub> a neighborhood breathes when the wind blows off a river that is running lower, for a single day at one place, and on average across the region over ten years of real weather.</p>
@@ -50,7 +49,6 @@
     </div>
     <div class="card c-blue">
       <div class="thumb" id="t-mort" role="img" aria-label="Deaths a year by year, 2015 to 2024, with 10% less water"></div>
-      <div class="thumb-cap">Deaths a year by year, 2015 to 2024, with 10% less water</div>
       <div class="tag">Health</div>
       <h3>River flow and mortality</h3>
       <p>The deaths a year from all causes, from cardiovascular disease, and from respiratory disease that follow from a change in river flow, a low-flow floor, or a drier climate, with 95% intervals.</p>
@@ -58,7 +56,6 @@
     </div>
     <div class="card c-gray">
       <div class="thumb" id="t-cost" role="img" aria-label="Cost a year in millions of dollars, from 90% less to twice the water"></div>
-      <div class="thumb-cap">Cost a year in millions of dollars, from 90% less to twice the water</div>
       <div class="tag">Economics</div>
       <h3>River flow and economic costs</h3>
       <p>What those deaths are worth in dollars a year, over the decade, and per resident, at the US Environmental Protection Agency's value of a statistical life and its range.</p>
@@ -118,44 +115,74 @@ RGModel.load("data/").then(M => {
   drawThumbs(M);
 }).catch(e => { document.getElementById("facts").insertAdjacentHTML("afterend",
   '<p class="warn on">The study data could not be loaded. ' + e.message + '</p>'); });
-/* Small preview charts for the tool cards, computed live from the same model. */
+/* Small preview charts for the tool cards, computed live from the same model.
+   Each one carries its own axis values and axis titles so it reads on its own. */
+const SUB = t => t.replace(/PM10/g, 'PM<tspan dy="2.6" font-size="7.4">10</tspan><tspan dy="-2.6"></tspan>');
+function niceStep(span, n) {
+  const raw = span / n, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+  return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+}
 function thumbSVG(el, o) {
-  const W = 300, H = 118, L = 8, R = 8, T = 10, B = 10;
+  const W = 300, H = 168, L = 46, R = 10, T = 10, B = 38;
   const xs = o.x, ys = o.y, n = ys.length;
-  const lo = Math.min(0, ...ys), hi = Math.max(0, ...ys);
-  const x0 = Math.min(...xs), x1 = Math.max(...xs);
-  const X = v => L + (W - L - R) * (v - x0) / (x1 - x0 || 1);
-  const Y = v => T + (H - T - B) * (hi - v) / (hi - lo || 1);
-  let g = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">`;
-  g += `<line x1="${L}" x2="${W - R}" y1="${Y(0)}" y2="${Y(0)}" stroke="#B9B4B5" stroke-width="1" stroke-dasharray="3 3"/>`;
+  let lo = Math.min(0, ...ys), hi = Math.max(0, ...ys);
+  const st = niceStep(hi - lo || 1, 4);
+  lo = Math.floor(lo / st) * st; hi = Math.ceil(hi / st) * st;
+  const x0 = o.xmin !== undefined ? o.xmin : Math.min(...xs), x1 = o.xmax !== undefined ? o.xmax : Math.max(...xs);
+  const pw = W - L - R, ph = H - T - B;
+  const X = o.kind === "bars" ? (i => L + pw * (i + 0.5) / n) : (v => L + pw * (o.xf(v) - o.xf(x0)) / (o.xf(x1) - o.xf(x0)));
+  const Y = v => T + ph * (hi - v) / (hi - lo);
+  const font = 'font-family="Source Sans 3, Segoe UI, Helvetica, Arial, sans-serif"';
+  let g = `<svg viewBox="0 0 ${W} ${H}" ${font} aria-hidden="true">`;
+  for (let v = lo; v <= hi + st / 2; v += st) {
+    const y = Y(v).toFixed(1);
+    g += `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" stroke="${Math.abs(v) < st / 1e6 ? "#9A9A94" : "#ECE8E9"}" stroke-width="1"${Math.abs(v) < st / 1e6 ? ' stroke-dasharray="3 3"' : ""}/>`;
+    g += `<text x="${L - 5}" y="${y}" dy="3.4" font-size="9.5" fill="#5B5658" text-anchor="end">${o.fy(v)}</text>`;
+  }
+  g += `<line x1="${L}" x2="${W - R}" y1="${T + ph}" y2="${T + ph}" stroke="#5B5658" stroke-width="0.8"/>`;
   if (o.kind === "bars") {
-    const bw = (W - L - R) / n;
+    const bw = pw / n;
     ys.forEach((v, i) => {
       const y = Math.min(Y(v), Y(0)), h = Math.max(1, Math.abs(Y(v) - Y(0)));
-      g += `<rect x="${(L + i * bw + bw * 0.16).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.68).toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${o.color}" opacity="${0.55 + 0.45 * (i + 1) / n}"/>`;
+      g += `<rect x="${(L + i * bw + bw * 0.16).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.68).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${o.color}"/>`;
     });
+    xs.forEach((v, i) => { if (i % o.every === 0) g += `<text x="${X(i).toFixed(1)}" y="${T + ph + 12}" font-size="9.5" fill="#5B5658" text-anchor="middle">${v}</text>`; });
   } else {
     const pts = xs.map((v, i) => `${X(v).toFixed(1)},${Y(ys[i]).toFixed(1)}`);
-    g += `<path d="M${X(xs[0]).toFixed(1)},${Y(0).toFixed(1)} L${pts.join(" L")} L${X(xs[n - 1]).toFixed(1)},${Y(0).toFixed(1)} Z" fill="${o.color}" opacity="0.16"/>`;
-    g += `<polyline points="${pts.join(" ")}" fill="none" stroke="${o.color}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;
-    if (o.dot) g += `<circle cx="${X(o.dot[0]).toFixed(1)}" cy="${Y(o.dot[1]).toFixed(1)}" r="4" fill="${o.color}" stroke="#fff" stroke-width="1.5"/>`;
+    g += `<path d="M${X(xs[0]).toFixed(1)},${Y(0).toFixed(1)} L${pts.join(" L")} L${X(xs[n - 1]).toFixed(1)},${Y(0).toFixed(1)} Z" fill="${o.color}" opacity="0.14"/>`;
+    g += `<polyline points="${pts.join(" ")}" fill="none" stroke="${o.color}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    o.xticks.forEach(v => {
+      const x = X(v).toFixed(1);
+      g += `<line x1="${x}" x2="${x}" y1="${T + ph}" y2="${T + ph + 3}" stroke="#5B5658" stroke-width="0.8"/>`;
+      const anc = X(v) - L < 12 ? "start" : W - R - X(v) < 16 ? "end" : "middle";
+      g += `<text x="${anc === "start" ? L - 2 : anc === "end" ? W - R + 2 : x}" y="${T + ph + 12}" font-size="9.5" fill="#5B5658" text-anchor="${anc}">${o.fx(v)}</text>`;
+    });
+    if (o.dot) g += `<circle cx="${X(o.dot[0]).toFixed(1)}" cy="${Y(o.dot[1]).toFixed(1)}" r="3.6" fill="${o.color}" stroke="#fff" stroke-width="1.4"/>`;
   }
+  g += `<text x="${L + pw / 2}" y="${H - 5}" font-size="10.5" font-weight="600" fill="#1C1A1B" text-anchor="middle">${SUB(o.xlab)}</text>`;
+  g += `<text transform="translate(11 ${T + ph / 2}) rotate(-90)" font-size="10.5" font-weight="600" fill="#1C1A1B" text-anchor="middle">${SUB(o.ylab)}</text>`;
   el.innerHTML = g + "</svg>";
 }
+const minus = s => String(s).replace(/^-/, "−");
 function drawThumbs(M) {
   const css = getComputedStyle(document.documentElement);
   const col = k => css.getPropertyValue(k).trim();
-  /* Tool 1: % change in PM10, 24 hours downwind, flow falling from 150 cfs (log scale) */
+  /* Tool 1: one place, a full day downwind, the river falling from 150 cfs (log scale) */
   const qs = [], ps = [];
-  for (let i = 0; i <= 40; i++) { const q = 150 * Math.pow(10 / 150, i / 40); qs.push(-Math.log(q)); ps.push(M.onePlace(150, q, 24).pct); }
-  thumbSVG(document.getElementById("t-pm10"), { kind: "line", x: qs, y: ps, color: col("--maroon") });
+  for (let i = 0; i <= 48; i++) { const q = 10 * Math.pow(15, i / 48); qs.push(q); ps.push(M.onePlace(150, q, 24).pct); }
+  thumbSVG(document.getElementById("t-pm10"), { kind: "line", x: qs, y: ps, color: col("--maroon"), xf: Math.log,
+    xticks: [10, 25, 50, 100, 150], fx: v => v, fy: v => minus(+v.toFixed(1)) + "%",
+    xlab: "River flow (cfs), down from 150", ylab: "Change in PM10" });
   /* Tool 2: all-cause deaths by year with 10% less water */
   const c = M.central({ type: "percent", value: -0.1 });
-  thumbSVG(document.getElementById("t-mort"), { kind: "bars", x: c.years, y: c.years.map(y => c.byYear[y].all), color: col("--blue") });
+  thumbSVG(document.getElementById("t-mort"), { kind: "bars", x: c.years, y: c.years.map(y => c.byYear[y].all), color: col("--blue"),
+    every: 3, fy: v => minus(+v.toFixed(2)), xlab: "Year, with 10% less river flow", ylab: "Added deaths" });
   /* Tool 3: annual cost across the change-in-flow slider */
   const pc = [], cost = [];
-  for (let v = -90; v <= 100; v += 10) { pc.push(v); cost.push(M.central({ type: "percent", value: v / 100 }).deathsYr.all * M.vsl.central / 1e6); }
-  thumbSVG(document.getElementById("t-cost"), { kind: "line", x: pc, y: cost, color: col("--gray"), dot: [-10, cost[pc.indexOf(-10)]] });
+  for (let v = -90; v <= 100; v += 5) { pc.push(v); cost.push(M.central({ type: "percent", value: v / 100 }).deathsYr.all * M.vsl.central / 1e6); }
+  thumbSVG(document.getElementById("t-cost"), { kind: "line", x: pc, y: cost, color: col("--gray"), xf: v => v,
+    xticks: [-90, -50, 0, 50, 100], fx: v => (v > 0 ? "+" : "") + minus(v) + "%", fy: v => minus("$" + (+v.toFixed(1))).replace("$−", "−$").replace("$-", "−$"),
+    dot: [-10, cost[pc.indexOf(-10)]], xlab: "Change in river flow", ylab: "Cost ($ million/yr)" });
 }
 </script>
 </body>
