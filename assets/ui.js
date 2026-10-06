@@ -22,7 +22,7 @@
     reference: { btn: "Versus a dry river", label: "Flow at the Central Avenue gauge in the comparison",
                  min: 1, max: 100, step: 1, def: 1, toValue: v => v,
                  show: v => v + " cfs",
-                 hint: "What the river as it actually flowed is worth, compared with a river carrying only this much at the Central Avenue gauge, with the rest of the river in the same proportion. 1 cfs is essentially dry." }
+                 hint: "The damages the river as it actually flowed avoids, compared with a river carrying only this much at the Central Avenue gauge, with the rest of the river in the same proportion. 1 cfs is essentially dry." }
   };
 
   const PRESETS = [
