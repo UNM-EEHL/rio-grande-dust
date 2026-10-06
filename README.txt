@@ -7,10 +7,10 @@ What this is
   and Robert P. Berrens, 2026, working paper):
 
     pm10.html        river flow and downwind PM10
-    mortality.html   river flow and short-term deaths (all causes,
+    mortality.html   river flow and short-term modeled mortality (all causes,
                      cardiovascular, respiratory), Bernalillo and Sandoval
                      counties
-    costs.html       river flow and the economic cost of those deaths
+    costs.html       river flow and the economic cost of that mortality
 
   index.html is the overview page. Everything runs in the browser; there is
   no server.
@@ -34,7 +34,7 @@ Where the numbers come from
     tool_daily.csv    one row per day, 2015 to 2024: population-weighted
                       downwind hours on each of the four river reaches, each
                       reach's flow, population-weighted PM10, baseline daily
-                      deaths by cause, the exposed population, and a flag
+                      mortality by cause, the exposed population, and a flag
                       for days the Central Avenue gauge read below 100 cfs
     tool_params.csv   the headline regression coefficient and its standard
                       error, the three mortality coefficients of Liu et al.

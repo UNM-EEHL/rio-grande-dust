@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 3 of 3</div>
     <h1>River Flow and Economic Costs</h1>
-    <p class="lede">The deaths from the mortality tool, valued in dollars. Choose a change in the river and a value of a statistical life, and see the cost a year, over a decade, and per resident of Bernalillo and Sandoval counties. All figures are in 2015 dollars.</p>
+    <p class="lede">The modeled mortality from the mortality tool, valued in dollars. Choose a change in the river and a value of a statistical life, and see the cost a year, over a decade, and per resident of Bernalillo and Sandoval counties. All figures are in 2015 dollars.</p>
   </div>
 </section>
 
@@ -41,7 +41,7 @@
     <div class="panel controls">
       <h3>Set the scenario</h3>
       <div id="sc"></div>
-      <div class="ctl"><label for="ep">Deaths counted</label>
+      <div class="ctl"><label for="ep">Mortality counted</label>
         <select id="ep">
           <option value="all">All causes</option>
           <option value="cvd">Cardiovascular only</option>
@@ -63,7 +63,7 @@
       <div class="busy" id="busy"></div>
       <div class="panel chart">
         <h3>By year</h3>
-        <div class="sub">Value of the change in deaths in each calendar year of 2015 to 2024, millions of 2015 dollars</div>
+        <div class="sub">Value of the change in modeled mortality in each calendar year of 2015 to 2024, millions of 2015 dollars</div>
         <div id="c1"></div>
       </div>
       <div class="panel chart">
@@ -77,12 +77,12 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>Deaths are computed exactly as in the mortality tool, with every scenario set at the Central Avenue gauge and the other three reaches moving in the same proportion, and multiplied by the value of a statistical life. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. The central value is the one the US Environmental Protection Agency currently applies, $8.71 million in 2015 dollars, the mean of a Weibull distribution with scale 9,648,168 and shape 1.509588. The low and high choices are that distribution's 2.5th and 97.5th percentiles. The value is applied to every death without adjustment for age, and without discounting, since every death counted here is a short-term one. The 95% interval reflects uncertainty in the regression and in the mortality coefficients at the chosen value of a statistical life.</p>
+      <p>Modeled mortality is computed exactly as in the mortality tool, with every scenario set at the Central Avenue gauge and the other three reaches moving in the same proportion, and multiplied by the value of a statistical life. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. The central value is the one the US Environmental Protection Agency currently applies, $8.71 million in 2015 dollars, the mean of a Weibull distribution with scale 9,648,168 and shape 1.509588. The low and high choices are that distribution's 2.5th and 97.5th percentiles. The value is applied to all modeled mortality without adjustment for age, and without discounting, since all of it is short-term. The 95% interval reflects uncertainty in the regression and in the mortality coefficients at the chosen value of a statistical life.</p>
       <p>The value of a statistical life is not the price of a life. It is what people are willing to pay, added up, for small reductions in their risk of dying: if each of 100,000 people would pay $87 to cut that risk by one in 100,000, together they value one statistical life at $8.7 million.</p>
     </details>
     <details>
       <summary>What is not included</summary>
-      <p>Only short-term deaths from PM<sub>10</sub> are valued. Hospital admissions, emergency visits, lost work and school days, long-term mortality, and the effects of fine particulate are not counted, so these are lower bounds on the cost.</p>
+      <p>Only short-term mortality from PM<sub>10</sub> is valued. Hospital admissions, emergency visits, lost work and school days, long-term mortality, and the effects of fine particulate are not counted, so these are lower bounds on the cost.</p>
     </details>
   </div>
 </main>
@@ -126,7 +126,7 @@
     $("v-yr").textContent = F.money(yr);
     $("v-yr-s").textContent = (sc.type === "reference" ? (yr >= 0 ? "of mortality the river prevents" : "of added mortality")
                                                       : (yr >= 0 ? "of added mortality" : "of mortality avoided")) +
-                              ", " + F.minus(F.deaths(c.deathsYr[e])) + " deaths";
+                              "; modeled mortality of " + F.minus(F.deaths(c.deathsYr[e])) + " a year";
     $("v-yr-ci").textContent = "";
     $("v-dec").textContent = F.money(yr * 10);
     $("v-pc").textContent = (yr < 0 ? "−$" : "$") + Math.abs(yr / M.meanPop).toFixed(2);
