@@ -167,12 +167,12 @@ const minus = s => String(s).replace(/^-/, "−");
 function drawThumbs(M) {
   const css = getComputedStyle(document.documentElement);
   const col = k => css.getPropertyValue(k).trim();
-  /* Tool 1: one place, a full day downwind, the river falling from 150 cfs (log scale) */
+  /* Tool 1: one place, a full day downwind, flow at the Central Avenue gauge moved away from 150 cfs */
   const qs = [], ps = [];
-  for (let i = 0; i <= 48; i++) { const q = 10 * Math.pow(15, i / 48); qs.push(q); ps.push(M.onePlace(150, q, 24).pct); }
-  thumbSVG(document.getElementById("t-pm10"), { kind: "line", x: qs, y: ps, color: col("--maroon"), xf: Math.log,
-    xticks: [10, 25, 50, 100, 150], fx: v => v, fy: v => minus(+v.toFixed(1)) + "%",
-    xlab: "River flow (cfs), down from 150", ylab: "Change in PM10" });
+  for (let i = 0; i <= 80; i++) { const q = 5 + 295 * Math.pow(i / 80, 1.6); qs.push(q); ps.push(M.onePlace(150, q, 24).pct); }
+  thumbSVG(document.getElementById("t-pm10"), { kind: "line", x: qs, y: ps, color: col("--maroon"), xf: v => v,
+    xmin: 0, xmax: 300, xticks: [0, 50, 100, 150, 200, 250, 300], fx: v => v, fy: v => minus(+v.toFixed(1)) + "%",
+    dot: [150, 0], xlab: "Central Avenue gauge flow (cfs), from 150", ylab: "Change in PM10" });
   /* Tool 2: all-cause deaths by year with 10% less water */
   const c = M.central({ type: "percent", value: -0.1 });
   thumbSVG(document.getElementById("t-mort"), { kind: "bars", x: c.years, y: c.years.map(y => c.byYear[y].all), color: col("--blue"),

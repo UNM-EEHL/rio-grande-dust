@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 1 of 3</div>
     <h1>River Flow and PM<sub>10</sub></h1>
-    <p class="lede">Two views of the same estimate. The first is one neighborhood on one day: the wind blows off the river for some hours, and you set how much water that stretch of river carries. The second is the whole Albuquerque area over every day of 2015 to 2024, with the wind as it actually blew.</p>
+    <p class="lede">Two views of the same estimate. The first is one neighborhood on one day: the wind blows off the river for some hours, and you set the flow at the Central Avenue gauge in Albuquerque. The second is the whole Albuquerque area over every day of 2015 to 2024, with the wind as it actually blew.</p>
   </div>
 </section>
 
@@ -41,10 +41,10 @@
   <div class="tool">
     <div class="panel controls">
       <h3>Set the day</h3>
-      <div class="ctl"><label for="qnow">River flow now <output id="o-qnow"></output></label>
+      <div class="ctl"><label for="qnow">Flow at the Central Avenue gauge now <output id="o-qnow"></output></label>
         <input id="qnow" type="range" min="0" max="1000" step="1">
-        <div class="hint">The flow in the stretch of river upwind, in cubic feet per second (cfs).</div></div>
-      <div class="ctl"><label for="qnew">River flow in the scenario <output id="o-qnew"></output></label>
+        <div class="hint">The river flow measured at the Central Avenue gauge in Albuquerque, in cubic feet per second (cfs).</div></div>
+      <div class="ctl"><label for="qnew">Flow at the Central Avenue gauge in the scenario <output id="o-qnew"></output></label>
         <input id="qnew" type="range" min="0" max="1000" step="1"></div>
       <div class="ctl"><label for="hrs">Hours the wind blows off the river <output id="o-hrs"></output></label>
         <input id="hrs" type="range" min="0" max="24" step="1" value="24">
@@ -64,7 +64,7 @@
         <div class="stat"><div class="k">PM<sub>10</sub> that day</div><div class="v" id="s-lvl"></div><div class="s" id="s-lvl-s"></div></div>
       </div>
       <div class="panel chart">
-        <h3>The same day at every river flow</h3>
+        <h3>The same day at every flow at the Central Avenue gauge</h3>
         <div class="sub">Change in PM<sub>10</sub>, %, against the scenario flow, holding the other settings; the band is the 95% interval</div>
         <div id="c1"></div>
       </div>
@@ -151,15 +151,16 @@
     const dir = qNew < qNow ? "less" : "more";
     $("sum1").textContent = qNew === qNow || h === 0
       ? "With no change in flow, or no wind off the river, the river makes no difference to PM₁₀ that day."
-      : `A neighborhood downwind of the river for ${h} hours, with the river carrying ${qNew.toLocaleString("en-US")} cfs instead of ${qNow.toLocaleString("en-US")}, breathes ${Math.abs(r.pct).toFixed(1)}% ${r.pct > 0 ? "more" : "less"} PM₁₀ that day: ${Math.abs(b * r.pct / 100).toFixed(2)} µg/m³ ${r.pct > 0 ? "more" : "less"} on an ordinary ${MONTHS[mon.value - 1]} day.`;
+      : `A neighborhood downwind of the river for ${h} hours, with ${qNew.toLocaleString("en-US")} cfs at the Central Avenue gauge instead of ${qNow.toLocaleString("en-US")}, breathes ${Math.abs(r.pct).toFixed(1)}% ${r.pct > 0 ? "more" : "less"} PM₁₀ that day: ${Math.abs(b * r.pct / 100).toFixed(2)} µg/m³ ${r.pct > 0 ? "more" : "less"} on an ordinary ${MONTHS[mon.value - 1]} day.`;
     const xs = [], ys = [], lo = [], hi = [];
-    for (let i = 0; i <= 60; i++) {
-      const q = QMIN * Math.pow(QMAX / QMIN, i / 60);
+    const XMAX = Math.max(1000, Math.ceil(Math.max(qNow, qNew) * 1.1 / 250) * 250);
+    for (let i = 0; i <= 160; i++) {
+      const q = QMIN + (XMAX - QMIN) * Math.pow(i / 160, 2);
       const rr = M.onePlace(qNow, q, h);
       xs.push(q); ys.push(rr.pct); lo.push(rr.ci[0]); hi.push(rr.ci[1]);
     }
-    RGCharts.line($("c1"), { x: xs, y: ys, lo, hi, logX: true,
-      xlabel: "River flow in the scenario, cfs (log scale)", ylabel: "Change in PM₁₀, %",
+    RGCharts.line($("c1"), { x: xs, y: ys, lo, hi, 
+      xlabel: "Flow at the Central Avenue gauge in the scenario, cfs", ylabel: "Change in PM₁₀, %",
       fmtX: v => v.toLocaleString("en-US"), fmtY: v => F.minus(v) + "%",
       marker: { x: qNew, y: r.pct, label: F.signed(r.pct, 1) + "%" },
       aria: "Change in PM₁₀ against scenario flow" });
