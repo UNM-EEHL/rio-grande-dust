@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 3 of 3</div>
     <h1>River Flow and Economic Damages</h1>
-    <p class="lede">The economic damages from the short-term human mortality in the mortality tool. Choose a change in the river and a value of a statistical life, and see the economic damages each year, over a decade, and per resident of Bernalillo and Sandoval counties. All monetary estimates are in 2015 inflation-adjusted terms.</p>
+    <p class="lede">The economic damages from the short-term human mortality in the mortality tool. Choose a change in the flows of the Rio Grande and a value of a statistical life, and see the economic damages each year, over a decade, and per resident of Bernalillo and Sandoval counties. All monetary estimates are in 2015 inflation-adjusted terms.</p>
   </div>
 </section>
 
@@ -49,7 +49,7 @@
         </select></div>
       <div class="ctl"><label for="vsl">Value of a statistical life</label>
         <select id="vsl"></select>
-        <div class="hint">The US Environmental Protection Agency's central value, and the 2.5th and 97.5th percentiles of the distribution it is the mean of.</div></div>
+        <div class="hint">The US Environmental Protection Agency's (EPA's) central value, and the 2.5th and 97.5th percentiles of the distribution it is the mean of.</div></div>
       <div class="warn" id="warn">This is far outside the flows the river carried from 2015 to 2024, so the result is an extrapolation.</div>
       <button type="button" class="reset" id="reset">Restore defaults</button>
     </div>
@@ -77,8 +77,8 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>Short-term human mortality (modeled) is computed exactly as in the mortality tool, with every scenario set at the Central Avenue gauge and the other three reaches moving in the same proportion, and multiplied by the value of a statistical life. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. The central value is the one the US Environmental Protection Agency currently applies, $8.71 million in 2015 inflation-adjusted terms, the mean of a Weibull distribution with scale 9,648,168 and shape 1.509588. The low and high choices are that distribution's 2.5th and 97.5th percentiles. The value is applied to all modeled mortality without adjustment for age, and without discounting, since all of it is short-term. The 95% interval reflects uncertainty in the regression and in the mortality coefficients at the chosen value of a statistical life.</p>
-      <p>The value of a statistical life is not the price of a life. It is what people are willing to pay, added up, for small reductions in their risk of dying: if each of 100,000 people would pay $87 to cut that risk by one in 100,000, together they value one statistical life at $8.7 million.</p>
+      <p>Short-term human mortality (modeled) is computed exactly as in the mortality tool, with every scenario set at the Central Avenue gauge and the other three reaches moving in the same proportion, and multiplied by the value of a statistical life. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. The central value is the one the US Environmental Protection Agency (EPA) currently applies, $8.71 million in 2015 inflation-adjusted terms, the mean of a Weibull distribution with scale 9,648,168 and shape 1.509588. The low and high choices are that distribution's 2.5th and 97.5th percentiles. The value is applied to all modeled mortality without adjustment for age, and without discounting, since all of it is short-term. The 95% interval reflects uncertainty in the regression and in the mortality coefficients at the chosen value of a statistical life.</p>
+      <p>The value of a statistical life is not the price of a human life. It is what people are willing to pay, added up, for small reductions in their risk of dying: if each of 100,000 people would pay $87 to cut that risk by one in 100,000, together they value one statistical life at $8.7 million.</p>
     </details>
     <details>
       <summary>What is not included</summary>
