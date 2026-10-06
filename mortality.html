@@ -42,6 +42,7 @@
       <h3>Set the scenario</h3>
       <div id="sc"></div>
       <div class="warn" id="warn">This is far outside the flows the river carried from 2015 to 2024, so the result is an extrapolation.</div>
+      <button type="button" class="reset" id="reset">Restore defaults</button>
     </div>
     <div class="results">
       <p class="summary" id="sum"></p>
@@ -135,6 +136,7 @@
   }
   ctl = RGUI.scenarioControls($("sc"), (sc, raw) => render(sc, raw));
   { const c0 = ctl.current(); render(c0.sc, c0.raw); }
+  $("reset").addEventListener("click", () => ctl.reset());
 })().catch(e => document.querySelector("main").insertAdjacentHTML("afterbegin",
   '<p class="warn on">The study data could not be loaded. ' + e.message + '</p>'));
 </script>

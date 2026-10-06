@@ -40,19 +40,25 @@
   <h2>Pick a tool</h2>
   <p class="note">Each tool runs entirely in your browser and updates as you move the controls. The assumptions behind every number are written out on its page.</p>
   <div class="cards">
-    <div class="card">
+    <div class="card c-maroon">
+      <div class="thumb" id="t-pm10" role="img" aria-label="PM₁₀ at one place after a day downwind, as the river falls from 150 cfs"></div>
+      <div class="thumb-cap">PM<sub>10</sub> at one place after a day downwind, as the river falls from 150 cfs</div>
       <div class="tag">Air quality</div>
       <h3>River flow and PM<sub>10</sub></h3>
       <p>How much more PM<sub>10</sub> a neighborhood breathes when the wind blows off a river that is running lower, for a single day at one place, and on average across the region over ten years of real weather.</p>
       <a class="go" href="pm10.html">Open tool</a>
     </div>
-    <div class="card">
+    <div class="card c-blue">
+      <div class="thumb" id="t-mort" role="img" aria-label="Deaths a year by year, 2015 to 2024, with 10% less water"></div>
+      <div class="thumb-cap">Deaths a year by year, 2015 to 2024, with 10% less water</div>
       <div class="tag">Health</div>
       <h3>River flow and mortality</h3>
       <p>The deaths a year from all causes, from cardiovascular disease, and from respiratory disease that follow from a change in river flow, a low-flow floor, or a drier climate, with 95% intervals.</p>
       <a class="go" href="mortality.html">Open tool</a>
     </div>
-    <div class="card">
+    <div class="card c-gray">
+      <div class="thumb" id="t-cost" role="img" aria-label="Cost a year in millions of dollars, from 90% less to twice the water"></div>
+      <div class="thumb-cap">Cost a year in millions of dollars, from 90% less to twice the water</div>
       <div class="tag">Economics</div>
       <h3>River flow and economic costs</h3>
       <p>What those deaths are worth in dollars a year, over the decade, and per resident, at the US Environmental Protection Agency's value of a statistical life and its range.</p>
@@ -109,8 +115,48 @@ RGModel.load("data/").then(M => {
   document.getElementById("f-d").textContent = c.deathsYr.all.toFixed(1);
   document.getElementById("f-v").textContent = RGUI.fmt.money(c.deathsYr.all * M.vsl.central);
   document.getElementById("f-n").textContent = M.D.n.toLocaleString("en-US");
+  drawThumbs(M);
 }).catch(e => { document.getElementById("facts").insertAdjacentHTML("afterend",
   '<p class="warn on">The study data could not be loaded. ' + e.message + '</p>'); });
+/* Small preview charts for the tool cards, computed live from the same model. */
+function thumbSVG(el, o) {
+  const W = 300, H = 118, L = 8, R = 8, T = 10, B = 10;
+  const xs = o.x, ys = o.y, n = ys.length;
+  const lo = Math.min(0, ...ys), hi = Math.max(0, ...ys);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs);
+  const X = v => L + (W - L - R) * (v - x0) / (x1 - x0 || 1);
+  const Y = v => T + (H - T - B) * (hi - v) / (hi - lo || 1);
+  let g = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">`;
+  g += `<line x1="${L}" x2="${W - R}" y1="${Y(0)}" y2="${Y(0)}" stroke="#B9B4B5" stroke-width="1" stroke-dasharray="3 3"/>`;
+  if (o.kind === "bars") {
+    const bw = (W - L - R) / n;
+    ys.forEach((v, i) => {
+      const y = Math.min(Y(v), Y(0)), h = Math.max(1, Math.abs(Y(v) - Y(0)));
+      g += `<rect x="${(L + i * bw + bw * 0.16).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw * 0.68).toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${o.color}" opacity="${0.55 + 0.45 * (i + 1) / n}"/>`;
+    });
+  } else {
+    const pts = xs.map((v, i) => `${X(v).toFixed(1)},${Y(ys[i]).toFixed(1)}`);
+    g += `<path d="M${X(xs[0]).toFixed(1)},${Y(0).toFixed(1)} L${pts.join(" L")} L${X(xs[n - 1]).toFixed(1)},${Y(0).toFixed(1)} Z" fill="${o.color}" opacity="0.16"/>`;
+    g += `<polyline points="${pts.join(" ")}" fill="none" stroke="${o.color}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;
+    if (o.dot) g += `<circle cx="${X(o.dot[0]).toFixed(1)}" cy="${Y(o.dot[1]).toFixed(1)}" r="4" fill="${o.color}" stroke="#fff" stroke-width="1.5"/>`;
+  }
+  el.innerHTML = g + "</svg>";
+}
+function drawThumbs(M) {
+  const css = getComputedStyle(document.documentElement);
+  const col = k => css.getPropertyValue(k).trim();
+  /* Tool 1: % change in PM10, 24 hours downwind, flow falling from 150 cfs (log scale) */
+  const qs = [], ps = [];
+  for (let i = 0; i <= 40; i++) { const q = 150 * Math.pow(10 / 150, i / 40); qs.push(-Math.log(q)); ps.push(M.onePlace(150, q, 24).pct); }
+  thumbSVG(document.getElementById("t-pm10"), { kind: "line", x: qs, y: ps, color: col("--maroon") });
+  /* Tool 2: all-cause deaths by year with 10% less water */
+  const c = M.central({ type: "percent", value: -0.1 });
+  thumbSVG(document.getElementById("t-mort"), { kind: "bars", x: c.years, y: c.years.map(y => c.byYear[y].all), color: col("--blue") });
+  /* Tool 3: annual cost across the change-in-flow slider */
+  const pc = [], cost = [];
+  for (let v = -90; v <= 100; v += 10) { pc.push(v); cost.push(M.central({ type: "percent", value: v / 100 }).deathsYr.all * M.vsl.central / 1e6); }
+  thumbSVG(document.getElementById("t-cost"), { kind: "line", x: pc, y: cost, color: col("--gray"), dot: [-10, cost[pc.indexOf(-10)]] });
+}
 </script>
 </body>
 </html>
