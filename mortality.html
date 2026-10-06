@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>River Flow and Mortality</title>
+<meta name="description" content="Short-term deaths in Bernalillo and Sandoval counties that follow from changes in Middle Rio Grande river flow.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="assets/lab-mark.png" alt="">
+      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab</span></span>
+    </a>
+    <nav class="nav" aria-label="Tools">
+      <a href="index.html">Overview</a>
+      <a href="pm10.html">River flow and PM10</a>
+      <a href="mortality.html" aria-current="page">Mortality</a>
+      <a href="costs.html">Economic costs</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tool 2 of 3</div>
+    <h1>River Flow and Mortality</h1>
+    <p class="lede">Choose a change in the river and see how many more, or fewer, people in Bernalillo and Sandoval counties would die each year from the PM10 that follows, by all causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="tool">
+    <div class="panel controls">
+      <h3>Set the scenario</h3>
+      <div id="sc"></div>
+      <div class="warn" id="warn">This is far outside the flows the river carried from 2015 to 2024, so the result is an extrapolation.</div>
+    </div>
+    <div class="results">
+      <p class="summary" id="sum"></p>
+      <div class="stats">
+        <div class="stat primary"><div class="k">All causes</div><div class="v" id="d-all"></div><div class="s" id="d-all-s"></div><div class="s" id="d-all-ci"></div></div>
+        <div class="stat"><div class="k">Cardiovascular</div><div class="v" id="d-cvd"></div><div class="s" id="d-cvd-s"></div><div class="s" id="d-cvd-ci"></div></div>
+        <div class="stat"><div class="k">Respiratory</div><div class="v" id="d-resp"></div><div class="s" id="d-resp-s"></div><div class="s" id="d-resp-ci"></div></div>
+      </div>
+      <div class="busy" id="busy"></div>
+      <p class="note">Cardiovascular and respiratory deaths are part of the all-cause total, not in addition to it. Positive numbers are additional deaths; negative numbers are deaths avoided.</p>
+      <div class="panel chart">
+        <h3>All-cause deaths by year</h3>
+        <div class="sub">Under the scenario, each calendar year of 2015 to 2024</div>
+        <div id="c1"></div>
+      </div>
+      <div class="panel chart">
+        <h3>How the answer moves with the scenario</h3>
+        <div class="sub">All-cause deaths a year across the slider's range, with the 95% interval at the current setting</div>
+        <div id="c2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <details>
+      <summary>How this is calculated</summary>
+      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's monitors, applies the scenario to that day's flow on each reach, and converts the result into a change in population-weighted PM10 with the study's headline regression coefficient. The change in PM10 is carried into deaths with the concentration-response functions of Liu and coauthors (2019), which give 0.44% more deaths from all causes, 0.36% more cardiovascular deaths, and 0.47% more respiratory deaths for each 10 &micro;g/m&sup3; of PM10, applied to each month's baseline deaths in the two counties. The annual figure is the daily average times 365.25.</p>
+      <p>The 95% interval comes from 2,000 joint draws of the regression coefficient and the three mortality coefficients, written by the study's replication code; the tool reports the 2.5th and 97.5th percentiles across them. The study's own tables use a separate set of 2,000 draws, so intervals here can differ from them in the second decimal; the central estimates match exactly.</p>
+    </details>
+    <details>
+      <summary>What is not included</summary>
+      <p>Only short-term deaths, all ages, from PM10. Long-term exposure, hospital visits, asthma, and fine particulate are not counted, so the totals are conservative. The estimate uses same-day river flow, which the study shows understates the effect of a bed that has been drying for weeks.</p>
+    </details>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the author's own analysis and do not represent the views of any agency.</p>
+      <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
+      <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
+    </div>
+    <img src="assets/lab-mark.png" alt="Environmental Economics and Health Lab">
+  </div>
+</footer>
+
+<script src="assets/model.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(async function () {
+  const M = await RGModel.load("data/");
+  const F = RGUI.fmt, $ = id => document.getElementById(id);
+  let ctl = null, lastCI = null;
+  function verdict(sc, x) {
+    if (sc.type === "reference") return x >= 0 ? "deaths a year the river prevents" : "more deaths a year than the comparison channel";
+    return x >= 0 ? "more deaths a year" : "deaths avoided a year";
+  }
+  function showCI(ci) {
+    for (const e of M.ENDPOINTS)
+      $("d-" + e + "-ci").textContent = "95% interval " + F.minus(F.deaths(ci[e][0])) + " to " + F.minus(F.deaths(ci[e][1]));
+  }
+  const slow = RGUI.debounce((sc) => {
+    $("busy").textContent = "Computing 95% intervals…";
+    setTimeout(() => { lastCI = M.intervals(sc); showCI(lastCI); $("busy").textContent = ""; }, 20);
+  }, 120);
+  function render(sc, raw) {
+    const c = M.central(sc);
+    for (const e of M.ENDPOINTS) {
+      $("d-" + e).textContent = F.minus(F.deaths(c.deathsYr[e]));
+      $("d-" + e + "-s").textContent = verdict(sc, c.deathsYr[e]) + "; " + F.minus(F.deaths(c.deathsYr[e] * 10)) + " over a decade";
+      $("d-" + e + "-ci").textContent = "";
+    }
+    $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
+    const a = c.deathsYr.all, what = RGUI.describe(sc, raw);
+    $("sum").textContent = sc.type === "reference"
+      ? `Compared with a channel carrying ${raw} cfs, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} deaths a year from all causes in Bernalillo and Sandoval counties over 2015 to 2024.`
+      : `With ${what}, Bernalillo and Sandoval counties would have seen about ${F.deaths(Math.abs(a))} ${a >= 0 ? "more" : "fewer"} deaths a year from all causes.`;
+    RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].all),
+      fmt: v => F.minus(F.deaths(v)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Deaths, all causes",
+      aria: "All-cause deaths by year" });
+    const g = ctl ? ctl.grid() : null;
+    if (g) {
+      const xs = g.raw, ys = xs.map(r => M.central({ type: g.type, value: g.toValue(r) }).deathsYr.all);
+      RGCharts.line($("c2"), { x: xs, y: ys, xlabel: RGUI.TYPES[g.type].label, ylabel: "Deaths a year, all causes",
+        fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(2))),
+        marker: { x: raw, y: a, label: F.minus(F.deaths(a)) }, aria: "Deaths across the scenario range" });
+    }
+    slow(sc);
+  }
+  ctl = RGUI.scenarioControls($("sc"), (sc, raw) => render(sc, raw));
+  { const c0 = ctl.current(); render(c0.sc, c0.raw); }
+})().catch(e => document.querySelector("main").insertAdjacentHTML("afterbegin",
+  '<p class="warn on">The study data could not be loaded. ' + e.message + '</p>'));
+</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>River Flow and PM10</title>
+<meta name="description" content="How downwind PM10 in the Albuquerque area changes with river flow in the Middle Rio Grande.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="assets/lab-mark.png" alt="">
+      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab</span></span>
+    </a>
+    <nav class="nav" aria-label="Tools">
+      <a href="index.html">Overview</a>
+      <a href="pm10.html" aria-current="page">River flow and PM10</a>
+      <a href="mortality.html">Mortality</a>
+      <a href="costs.html">Economic costs</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tool 1 of 3</div>
+    <h1>River Flow and PM10</h1>
+    <p class="lede">Two views of the same estimate. The first is one neighborhood on one day: the wind blows off the river for some hours, and you set how much water that stretch of river carries. The second is the whole Albuquerque area over every day of 2015 to 2024, with the wind as it actually blew.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <h2>One neighborhood, one day</h2>
+  <div class="tool">
+    <div class="panel controls">
+      <h3>Set the day</h3>
+      <div class="ctl"><label for="qnow">River flow now <output id="o-qnow"></output></label>
+        <input id="qnow" type="range" min="0" max="1000" step="1">
+        <div class="hint">The flow in the stretch of river upwind, in cubic feet per second (cfs).</div></div>
+      <div class="ctl"><label for="qnew">River flow in the scenario <output id="o-qnew"></output></label>
+        <input id="qnew" type="range" min="0" max="1000" step="1"></div>
+      <div class="ctl"><label for="hrs">Hours the wind blows off the river <output id="o-hrs"></output></label>
+        <input id="hrs" type="range" min="0" max="24" step="1" value="24">
+        <div class="hint">24 is a full day downwind of the channel.</div></div>
+      <div class="ctl"><label for="mon">Month</label>
+        <select id="mon"></select></div>
+      <div class="ctl"><label for="base">PM10 on an ordinary day <output id="o-base"></output></label>
+        <input id="base" type="range" min="5" max="80" step="0.5">
+        <div class="hint">Set from the month's average across the region; move it to price a dustier or cleaner day.</div></div>
+    </div>
+    <div class="results">
+      <p class="summary" id="sum1"></p>
+      <div class="stats">
+        <div class="stat primary"><div class="k">Change in PM10</div><div class="v" id="s-pct"></div><div class="s" id="s-pct-ci"></div></div>
+        <div class="stat"><div class="k">In &micro;g/m&sup3;</div><div class="v" id="s-ug"></div><div class="s" id="s-ug-ci"></div></div>
+        <div class="stat"><div class="k">PM10 that day</div><div class="v" id="s-lvl"></div><div class="s" id="s-lvl-s"></div></div>
+      </div>
+      <div class="panel chart">
+        <h3>The same day at every river flow</h3>
+        <div class="sub">Change in PM10, %, against the scenario flow, holding the other settings; the band is the 95% interval</div>
+        <div id="c1"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>The whole region, 2015 to 2024</h2>
+  <div class="tool">
+    <div class="panel controls">
+      <h3>Set the scenario</h3>
+      <div id="sc"></div>
+      <div class="warn" id="warn2">This is far outside the flows the river carried from 2015 to 2024, so the result is an extrapolation.</div>
+    </div>
+    <div class="results">
+      <p class="summary" id="sum2"></p>
+      <div class="stats">
+        <div class="stat primary"><div class="k">Average change in PM10</div><div class="v" id="r-ug"></div><div class="s" id="r-ug-ci"></div></div>
+        <div class="stat"><div class="k">As a share of average PM10</div><div class="v" id="r-pct"></div><div class="s" id="r-pct-s"></div></div>
+        <div class="stat"><div class="k">Days in the calculation</div><div class="v" id="r-n"></div><div class="s">with a PM10 reading</div></div>
+      </div>
+      <div class="busy" id="busy2"></div>
+      <div class="panel chart">
+        <h3>By year</h3>
+        <div class="sub">Average change in population-weighted PM10 under the scenario, &micro;g/m&sup3;</div>
+        <div id="c2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <details>
+      <summary>How this is calculated</summary>
+      <p>The study's headline regression estimates how much the log of daily PM10 at a monitor changes for each hour the wind blows toward it from a reach of the river, per unit change in the log of that reach's flow. For one place and one day, the change in PM10 is <em>exp</em>(<em>b</em> &times; hours &times; ln(new flow / flow now)) &minus; 1, with <em>b</em> the regression coefficient. For the region, the same change is applied on every day of 2015 to 2024 to the population-weighted downwind hours on each of the four reaches, using that day's actual flows, and averaged across days. Population weights give each monitor a weight that falls with the square of its distance from each county's population center.</p>
+      <p>The effect is concentrated at low flow. Because the regression uses the log of flow, halving the flow has the same effect whether the river is at 1,000 or 100 cfs; the study finds that the true response is steeper than that at low flow and flatter at high flow, so these numbers understate the change when the river is very low and overstate it when the river is high.</p>
+    </details>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the author's own analysis and do not represent the views of any agency.</p>
+      <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
+      <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
+    </div>
+    <img src="assets/lab-mark.png" alt="Environmental Economics and Health Lab">
+  </div>
+</footer>
+
+<script src="assets/model.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(async function () {
+  const M = await RGModel.load("data/");
+  const F = RGUI.fmt;
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const QMIN = 5, QMAX = 3000;
+  const toQ = s => Math.round(QMIN * Math.pow(QMAX / QMIN, s / 1000));
+  const toS = q => Math.round(1000 * Math.log(q / QMIN) / Math.log(QMAX / QMIN));
+  const $ = id => document.getElementById(id);
+
+  const mon = $("mon");
+  MONTHS.forEach((m, i) => mon.insertAdjacentHTML("beforeend", `<option value="${i + 1}">${m}</option>`));
+  mon.value = 4;
+  $("qnow").value = toS(150); $("qnew").value = toS(75);
+  const setBase = () => { $("base").value = M.P["pm10_mo" + mon.value].toFixed(1); };
+  setBase();
+
+  function one() {
+    const qNow = toQ(+$("qnow").value), qNew = toQ(+$("qnew").value), h = +$("hrs").value, b = +$("base").value;
+    $("o-qnow").textContent = qNow.toLocaleString("en-US") + " cfs";
+    $("o-qnew").textContent = qNew.toLocaleString("en-US") + " cfs";
+    $("o-hrs").textContent = h + (h === 1 ? " hour" : " hours");
+    $("o-base").textContent = b.toFixed(1) + " µg/m³";
+    const r = M.onePlace(qNow, qNew, h);
+    $("s-pct").textContent = F.signed(r.pct, 1) + "%";
+    $("s-pct-ci").textContent = "95% interval " + F.signed(r.ci[0], 1) + "% to " + F.signed(r.ci[1], 1) + "%";
+    $("s-ug").textContent = F.signed(b * r.pct / 100, 2);
+    $("s-ug-ci").textContent = F.signed(b * r.ci[0] / 100, 2) + " to " + F.signed(b * r.ci[1] / 100, 2);
+    $("s-lvl").textContent = (b * (1 + r.pct / 100)).toFixed(1);
+    $("s-lvl-s").textContent = "µg/m³, against " + b.toFixed(1) + " on an ordinary " + MONTHS[mon.value - 1] + " day";
+    const dir = qNew < qNow ? "less" : "more";
+    $("sum1").textContent = qNew === qNow || h === 0
+      ? "With no change in flow, or no wind off the river, the river makes no difference to PM10 that day."
+      : `A neighborhood downwind of the river for ${h} hours, with the river carrying ${qNew.toLocaleString("en-US")} cfs instead of ${qNow.toLocaleString("en-US")}, breathes ${Math.abs(r.pct).toFixed(1)}% ${r.pct > 0 ? "more" : "less"} PM10 that day: ${Math.abs(b * r.pct / 100).toFixed(2)} µg/m³ ${r.pct > 0 ? "more" : "less"} on an ordinary ${MONTHS[mon.value - 1]} day.`;
+    const xs = [], ys = [], lo = [], hi = [];
+    for (let i = 0; i <= 60; i++) {
+      const q = QMIN * Math.pow(QMAX / QMIN, i / 60);
+      const rr = M.onePlace(qNow, q, h);
+      xs.push(q); ys.push(rr.pct); lo.push(rr.ci[0]); hi.push(rr.ci[1]);
+    }
+    RGCharts.line($("c1"), { x: xs, y: ys, lo, hi, logX: true,
+      xlabel: "River flow in the scenario, cfs (log scale)", ylabel: "Change in PM10, %",
+      fmtX: v => v.toLocaleString("en-US"), fmtY: v => F.minus(v) + "%",
+      marker: { x: qNew, y: r.pct, label: F.signed(r.pct, 1) + "%" },
+      aria: "Change in PM10 against scenario flow" });
+  }
+  ["qnow", "qnew", "hrs", "base"].forEach(id => $(id).addEventListener("input", one));
+  mon.addEventListener("change", () => { setBase(); one(); });
+  one();
+
+  const avgPM = (() => { let s = 0, n = 0; M.D.pm10.forEach(v => { if (Number.isFinite(v)) { s += v; n++; } }); return s / n; })();
+  const slow = RGUI.debounce((sc) => {
+    $("busy2").textContent = "Computing 95% intervals…";
+    setTimeout(() => {
+      const ci = M.intervals(sc);
+      $("r-ug-ci").textContent = "95% interval " + F.signed(ci.dC[0], 3) + " to " + F.signed(ci.dC[1], 3) + " µg/m³";
+      $("busy2").textContent = "";
+    }, 20);
+  }, 120);
+  RGUI.scenarioControls($("sc"), (sc, raw, final) => {
+    const c = M.central(sc);
+    $("r-ug").textContent = F.signed(c.dCmean, 3);
+    $("r-pct").textContent = F.signed(100 * c.dCmean / avgPM, 2) + "%";
+    $("r-pct-s").textContent = "of an average " + avgPM.toFixed(1) + " µg/m³";
+    $("r-n").textContent = c.nDays.toLocaleString("en-US");
+    $("r-ug-ci").textContent = "";
+    $("warn2").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
+    const what = RGUI.describe(sc, raw);
+    $("sum2").textContent = sc.type === "reference"
+      ? `Compared with ${what.replace("the river as it actually flowed, compared with ", "")}, the river as it actually flowed kept an average of ${Math.abs(c.dCmean).toFixed(3)} µg/m³ of PM10 out of the air the Albuquerque area breathes, every day of 2015 to 2024.`
+      : `Under ${what}, the air the Albuquerque area breathes would have carried ${Math.abs(c.dCmean).toFixed(3)} µg/m³ ${c.dCmean >= 0 ? "more" : "less"} PM10 on an average day of 2015 to 2024.`;
+    RGCharts.bars($("c2"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].dCmean),
+      fmt: v => F.minus(v.toFixed(3)), fmtAxis: v => F.minus(+v.toFixed(3)), ylabel: "µg/m³",
+      aria: "Average change in PM10 by year" });
+    slow(sc);
+  });
+})().catch(e => document.querySelector("main").insertAdjacentHTML("afterbegin",
+  '<p class="warn on">The study data could not be loaded. ' + e.message + '</p>'));
+</script>
+</body>
+</html>

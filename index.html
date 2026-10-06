@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rio Grande Flow, Dust, and Health Tools</title>
+<meta name="description" content="Interactive tools showing how river flow in the Middle Rio Grande changes downwind PM10, short-term mortality, and the economic cost of that mortality in the Albuquerque area.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="assets/lab-mark.png" alt="">
+      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab</span></span>
+    </a>
+    <nav class="nav" aria-label="Tools">
+      <a href="index.html" aria-current="page">Overview</a>
+      <a href="pm10.html">River flow and PM10</a>
+      <a href="mortality.html">Mortality</a>
+      <a href="costs.html">Economic costs</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Interactive research tools</div>
+    <h1>River Flow, Dust, and Health on the Middle Rio Grande</h1>
+    <p class="lede">When the Rio Grande runs low through Albuquerque, more of its bed is left bare, and the people living downwind breathe more coarse particulate matter (PM10). These tools let you change how much water the river carries and see what follows for the air, for short-term mortality, and for the economic cost of that mortality.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <h2>Pick a tool</h2>
+  <p class="note">Each tool runs entirely in your browser and updates as you move the controls. The assumptions behind every number are written out on its page.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="tag">Air quality</div>
+      <h3>River flow and PM10</h3>
+      <p>How much more PM10 a neighborhood breathes when the wind blows off a river that is running lower, for a single day at one place, and on average across the region over ten years of real weather.</p>
+      <a class="go" href="pm10.html">Open tool</a>
+    </div>
+    <div class="card">
+      <div class="tag">Health</div>
+      <h3>River flow and mortality</h3>
+      <p>The deaths a year from all causes, from cardiovascular disease, and from respiratory disease that follow from a change in river flow, a low-flow floor, or a drier climate, with 95% intervals.</p>
+      <a class="go" href="mortality.html">Open tool</a>
+    </div>
+    <div class="card">
+      <div class="tag">Economics</div>
+      <h3>River flow and economic costs</h3>
+      <p>What those deaths are worth in dollars a year, over the decade, and per resident, at the US Environmental Protection Agency's value of a statistical life and its range.</p>
+      <a class="go" href="costs.html">Open tool</a>
+    </div>
+  </div>
+
+
+  <h2>What the river is worth today</h2>
+  <p class="note">Compared with a channel that is essentially dry, over 2015 to 2024, computed live in your browser from the study's results.</p>
+  <div class="facts" id="facts">
+    <div class="fact"><div class="v" id="f-dc">&hellip;</div><div class="l">micrograms per cubic meter (&micro;g/m&sup3;) of PM10 kept out of the air the Albuquerque area breathes, on a typical day</div></div>
+    <div class="fact"><div class="v" id="f-d">&hellip;</div><div class="l">deaths from all causes avoided each year in Bernalillo and Sandoval counties</div></div>
+    <div class="fact"><div class="v" id="f-v">&hellip;</div><div class="l">a year in avoided mortality, at the US Environmental Protection Agency's value of a statistical life</div></div>
+    <div class="fact"><div class="v" id="f-n">&hellip;</div><div class="l">days of river flow, wind, PM10, and death records behind every calculation</div></div>
+  </div>
+
+  <div class="prose">
+    <h2>About this project</h2>
+    <p>The study follows the Middle Rio Grande from Cochiti Dam to the Isleta Diversion Dam, 64.6 miles of channel in four reaches, each with its own US Geological Survey stream gauge. Daily PM10 comes from the seven regulatory monitors in the Albuquerque area. For every monitor, reach, and day, the study counts the hours the wind blew from that reach toward that monitor, and asks whether PM10 rises more on those hours when the reach is carrying less water. It does, and the estimate rests on hours when the wind actually blew off the river, not on how close a monitor happens to be.</p>
+    <p>The change in PM10 is then carried into short-term mortality with the concentration-response functions of Liu and coauthors (2019), using monthly baseline death counts for Bernalillo and Sandoval counties, and valued at the US Environmental Protection Agency's value of a statistical life in 2015 dollars.</p>
+
+    <details>
+      <summary>How the tools calculate</summary>
+      <p>Every number the tools use, from the regression coefficient to the daily river flows, downwind hours, PM10, and baseline deaths, is written by the study's replication code. Your browser applies the same four equations the study does: the scenario's change in each reach's flow, the change in PM10 that follows, the change in deaths, and their value. The 95% intervals come from the same 2,000 joint draws of the regression coefficient and the mortality coefficients that the replication code writes. A test in this repository recomputes every scenario the replication code reports and checks that the browser matches it.</p>
+    </details>
+    <details>
+      <summary>What the tools do not show</summary>
+      <p>The results are for short-term (acute) mortality only, all ages, from PM10 only, with one set of concentration-response functions. Long-term mortality, hospital visits, and fine particulate are not included, so the dollar figures are conservative. The estimate uses same-day river flow, which understates the effect of a bed that has been drying for weeks; the study treats it as a lower bound. Scenarios far outside the flows the river actually carried from 2015 to 2024 are extrapolations.</p>
+    </details>
+
+    <h2>Cite this work</h2>
+    <p class="cite">Jones, B.A. (2026). <em>Flow in the Middle Rio Grande and Particulate Air Pollution in the Albuquerque Area</em>. Working paper, Department of Economics, University of New Mexico.</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the author's own analysis and do not represent the views of any agency.</p>
+      <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
+      <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
+    </div>
+    <img src="assets/lab-mark.png" alt="Environmental Economics and Health Lab">
+  </div>
+</footer>
+
+<script src="assets/model.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+RGModel.load("data/").then(M => {
+  const c = M.central({ type: "reference", value: 1 });
+  document.getElementById("f-dc").textContent = c.dCmean.toFixed(2);
+  document.getElementById("f-d").textContent = c.deathsYr.all.toFixed(1);
+  document.getElementById("f-v").textContent = RGUI.fmt.money(c.deathsYr.all * M.vsl.central);
+  document.getElementById("f-n").textContent = M.D.n.toLocaleString("en-US");
+}).catch(e => { document.getElementById("facts").insertAdjacentHTML("afterend",
+  '<p class="warn on">The study data could not be loaded. ' + e.message + '</p>'); });
+</script>
+</body>
+</html>

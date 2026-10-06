@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>River Flow and Economic Costs</title>
+<meta name="description" content="The economic cost of short-term mortality from PM10 that follows changes in Middle Rio Grande river flow.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="assets/lab-mark.png" alt="">
+      <span><span class="b1">University of New Mexico</span><span class="b2">Environmental Economics &amp; Health Lab</span></span>
+    </a>
+    <nav class="nav" aria-label="Tools">
+      <a href="index.html">Overview</a>
+      <a href="pm10.html">River flow and PM10</a>
+      <a href="mortality.html">Mortality</a>
+      <a href="costs.html" aria-current="page">Economic costs</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tool 3 of 3</div>
+    <h1>River Flow and Economic Costs</h1>
+    <p class="lede">The deaths from the mortality tool, valued in dollars. Choose a change in the river and a value of a statistical life, and see the cost a year, over a decade, and per resident of Bernalillo and Sandoval counties. All figures are in 2015 dollars.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="tool">
+    <div class="panel controls">
+      <h3>Set the scenario</h3>
+      <div id="sc"></div>
+      <div class="ctl"><label for="ep">Deaths counted</label>
+        <select id="ep">
+          <option value="all">All causes</option>
+          <option value="cvd">Cardiovascular only</option>
+          <option value="resp">Respiratory only</option>
+        </select></div>
+      <div class="ctl"><label for="vsl">Value of a statistical life</label>
+        <select id="vsl"></select>
+        <div class="hint">The US Environmental Protection Agency's central value, and the 2.5th and 97.5th percentiles of the distribution it is the mean of.</div></div>
+      <div class="warn" id="warn">This is far outside the flows the river carried from 2015 to 2024, so the result is an extrapolation.</div>
+    </div>
+    <div class="results">
+      <p class="summary" id="sum"></p>
+      <div class="stats">
+        <div class="stat primary"><div class="k">A year</div><div class="v" id="v-yr"></div><div class="s" id="v-yr-s"></div><div class="s" id="v-yr-ci"></div></div>
+        <div class="stat"><div class="k">Over a decade</div><div class="v" id="v-dec"></div><div class="s">ten years at the annual rate</div></div>
+        <div class="stat"><div class="k">Per resident, a year</div><div class="v" id="v-pc"></div><div class="s" id="v-pc-s"></div></div>
+      </div>
+      <div class="busy" id="busy"></div>
+      <div class="panel chart">
+        <h3>By year</h3>
+        <div class="sub">Value of the change in deaths in each calendar year of 2015 to 2024, millions of 2015 dollars</div>
+        <div id="c1"></div>
+      </div>
+      <div class="panel chart">
+        <h3>How the answer moves with the scenario</h3>
+        <div class="sub">Value a year across the slider's range, millions of 2015 dollars</div>
+        <div id="c2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <details>
+      <summary>How this is calculated</summary>
+      <p>Deaths are computed exactly as in the mortality tool and multiplied by the value of a statistical life. The central value is the one the US Environmental Protection Agency currently applies, $8.71 million in 2015 dollars, the mean of a Weibull distribution with scale 9,648,168 and shape 1.509588. The low and high choices are that distribution's 2.5th and 97.5th percentiles. The value is applied to every death without adjustment for age, and without discounting, since every death counted here is a short-term one. The 95% interval reflects uncertainty in the regression and in the mortality coefficients at the chosen value of a statistical life.</p>
+      <p>The value of a statistical life is not the price of a life. It is what people are willing to pay, added up, for small reductions in their risk of dying: if each of 100,000 people would pay $87 to cut that risk by one in 100,000, together they value one statistical life at $8.7 million.</p>
+    </details>
+    <details>
+      <summary>What is not included</summary>
+      <p>Only short-term deaths from PM10 are valued. Hospital admissions, emergency visits, lost work and school days, long-term mortality, and the effects of fine particulate are not counted, so these are lower bounds on the cost.</p>
+    </details>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the author's own analysis and do not represent the views of any agency.</p>
+      <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
+      <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
+    </div>
+    <img src="assets/lab-mark.png" alt="Environmental Economics and Health Lab">
+  </div>
+</footer>
+
+<script src="assets/model.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(async function () {
+  const M = await RGModel.load("data/");
+  const F = RGUI.fmt, $ = id => document.getElementById(id);
+  const vslSel = $("vsl");
+  [["central", "EPA central, " + F.money(M.vsl.central)], ["low", "Low, " + F.money(M.vsl.low)],
+   ["high", "High, " + F.money(M.vsl.high)]].forEach(([k, l]) =>
+    vslSel.insertAdjacentHTML("beforeend", `<option value="${k}">${l}</option>`));
+  let ctl = null, cur = null;
+  const NAMES = { all: "all causes", cvd: "cardiovascular disease", resp: "respiratory disease" };
+  const slow = RGUI.debounce((sc) => {
+    $("busy").textContent = "Computing 95% intervals…";
+    setTimeout(() => {
+      const ci = M.intervals(sc), e = $("ep").value, V = M.vsl[vslSel.value];
+      $("v-yr-ci").textContent = "95% interval " + F.money(ci[e][0] * V) + " to " + F.money(ci[e][1] * V);
+      $("busy").textContent = "";
+    }, 20);
+  }, 120);
+  function render(sc, raw) {
+    cur = { sc, raw };
+    const c = M.central(sc), e = $("ep").value, V = M.vsl[vslSel.value];
+    const yr = c.deathsYr[e] * V;
+    $("v-yr").textContent = F.money(yr);
+    $("v-yr-s").textContent = (sc.type === "reference" ? (yr >= 0 ? "of mortality the river prevents" : "of added mortality")
+                                                      : (yr >= 0 ? "of added mortality" : "of mortality avoided")) +
+                              ", " + F.minus(F.deaths(c.deathsYr[e])) + " deaths";
+    $("v-yr-ci").textContent = "";
+    $("v-dec").textContent = F.money(yr * 10);
+    $("v-pc").textContent = (yr < 0 ? "−$" : "$") + Math.abs(yr / M.meanPop).toFixed(2);
+    $("v-pc-s").textContent = "across " + Math.round(M.meanPop).toLocaleString("en-US") + " residents";
+    $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
+    const what = RGUI.describe(sc, raw);
+    $("sum").textContent = sc.type === "reference"
+      ? `Compared with a channel carrying ${raw} cfs, the river as it actually flowed prevented mortality from ${NAMES[e]} worth about ${F.money(Math.abs(yr))} a year over 2015 to 2024.`
+      : `With ${what}, the added mortality from ${NAMES[e]} in Bernalillo and Sandoval counties would ${yr >= 0 ? "cost" : "save"} about ${F.money(Math.abs(yr))} a year.`;
+    RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y][e] * V / 1e6),
+      fmt: v => F.minus(v.toFixed(v === 0 ? 0 : Math.abs(v) < 1 ? 2 : 1)), fmtAxis: v => F.minus(String(+v.toFixed(2))),
+      ylabel: "Millions of 2015 dollars", aria: "Value by year" });
+    if (ctl) {
+      const g = ctl.grid();
+      const xs = g.raw, ys = xs.map(r => M.central({ type: g.type, value: g.toValue(r) }).deathsYr[e] * V / 1e6);
+      RGCharts.line($("c2"), { x: xs, y: ys, xlabel: RGUI.TYPES[g.type].label, ylabel: "Millions of 2015 dollars a year",
+        fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(1))),
+        marker: { x: raw, y: yr / 1e6, label: F.money(yr) }, aria: "Value across the scenario range" });
+    }
+    slow(sc);
+  }
+  ctl = RGUI.scenarioControls($("sc"), (sc, raw) => render(sc, raw));
+  { const c0 = ctl.current(); render(c0.sc, c0.raw); }
+  $("ep").addEventListener("change", () => render(cur.sc, cur.raw));
+  vslSel.addEventListener("change", () => render(cur.sc, cur.raw));
+})().catch(e => document.querySelector("main").insertAdjacentHTML("afterbegin",
+  '<p class="warn on">The study data could not be loaded. ' + e.message + '</p>'));
+</script>
+</body>
+</html>
