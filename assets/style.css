@@ -93,6 +93,7 @@ select { width: 100%; padding: 7px 8px; border: 1px solid var(--line); border-ra
 .stat .k { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; }
 .stat .v { font-family: var(--serif); font-size: 2rem; color: var(--ink); font-variant-numeric: tabular-nums; margin: 4px 0 2px; }
 .unit { text-transform: none; letter-spacing: 0.02em; }
+@media (min-width: 921px) { .stats.even-k .stat .k { min-height: 2.6em; } }
 .stat .s { font-size: 0.88rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .stat.primary { border-top: 4px solid var(--maroon); }
 .summary { font-size: 1.05rem; background: var(--maroon-pale); border-left: 4px solid var(--maroon); padding: 14px 16px; border-radius: 6px; margin: 0; }
