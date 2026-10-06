@@ -69,7 +69,7 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's monitors, applies the scenario to that day's flow on each reach, and converts the result into a change in population-weighted PM<sub>10</sub> with the study's headline regression coefficient. The change in PM<sub>10</sub> is carried into deaths with the concentration-response functions of Liu and coauthors (2019), which give 0.44% more deaths from all causes, 0.36% more cardiovascular deaths, and 0.47% more respiratory deaths for each 10 &micro;g/m&sup3; of PM<sub>10</sub>, applied to each month's baseline deaths in the two counties. The annual figure is the daily average times 365.25.</p>
+      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's monitors, applies the scenario to that day's flow at the Central Avenue gauge, moves the other three reaches in the same proportion, and converts the result into a change in population-weighted PM<sub>10</sub> with the study's headline regression coefficient. The change in PM<sub>10</sub> is carried into deaths with the concentration-response functions of Liu and coauthors (2019), which give 0.44% more deaths from all causes, 0.36% more cardiovascular deaths, and 0.47% more respiratory deaths for each 10 &micro;g/m&sup3; of PM<sub>10</sub>, applied to each month's baseline deaths in the two counties. The annual figure is the daily average times 365.25. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same.</p>
       <p>The 95% interval comes from 2,000 joint draws of the regression coefficient and the three mortality coefficients, written by the study's replication code; the tool reports the 2.5th and 97.5th percentiles across them. The study's own tables use a separate set of 2,000 draws, so intervals here can differ from them in the second decimal; the central estimates match exactly.</p>
     </details>
     <details>
@@ -99,7 +99,7 @@
   const F = RGUI.fmt, $ = id => document.getElementById(id);
   let ctl = null, lastCI = null;
   function verdict(sc, x) {
-    if (sc.type === "reference") return x >= 0 ? "deaths a year the river prevents" : "more deaths a year than the comparison channel";
+    if (sc.type === "reference") return x >= 0 ? "deaths a year the river prevents" : "more deaths a year than the comparison river";
     return x >= 0 ? "more deaths a year" : "deaths avoided a year";
   }
   function showCI(ci) {
@@ -120,7 +120,7 @@
     $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
     const a = c.deathsYr.all, what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
-      ? `Compared with a channel carrying ${raw} cfs, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} deaths a year from all causes in Bernalillo and Sandoval counties over 2015 to 2024.`
+      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} deaths a year from all causes in Bernalillo and Sandoval counties over 2015 to 2024.`
       : `With ${what}, Bernalillo and Sandoval counties would have seen about ${F.deaths(Math.abs(a))} ${a >= 0 ? "more" : "fewer"} deaths a year from all causes.`;
     RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].all),
       fmt: v => F.minus(F.deaths(v)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Deaths, all causes",

@@ -77,7 +77,7 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>Deaths are computed exactly as in the mortality tool and multiplied by the value of a statistical life. The central value is the one the US Environmental Protection Agency currently applies, $8.71 million in 2015 dollars, the mean of a Weibull distribution with scale 9,648,168 and shape 1.509588. The low and high choices are that distribution's 2.5th and 97.5th percentiles. The value is applied to every death without adjustment for age, and without discounting, since every death counted here is a short-term one. The 95% interval reflects uncertainty in the regression and in the mortality coefficients at the chosen value of a statistical life.</p>
+      <p>Deaths are computed exactly as in the mortality tool, with every scenario set at the Central Avenue gauge and the other three reaches moving in the same proportion, and multiplied by the value of a statistical life. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. The central value is the one the US Environmental Protection Agency currently applies, $8.71 million in 2015 dollars, the mean of a Weibull distribution with scale 9,648,168 and shape 1.509588. The low and high choices are that distribution's 2.5th and 97.5th percentiles. The value is applied to every death without adjustment for age, and without discounting, since every death counted here is a short-term one. The 95% interval reflects uncertainty in the regression and in the mortality coefficients at the chosen value of a statistical life.</p>
       <p>The value of a statistical life is not the price of a life. It is what people are willing to pay, added up, for small reductions in their risk of dying: if each of 100,000 people would pay $87 to cut that risk by one in 100,000, together they value one statistical life at $8.7 million.</p>
     </details>
     <details>
@@ -134,7 +134,7 @@
     $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
     const what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
-      ? `Compared with a channel carrying ${raw} cfs, the river as it actually flowed prevented mortality from ${NAMES[e]} worth about ${F.money(Math.abs(yr))} a year over 2015 to 2024.`
+      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge, the river as it actually flowed prevented mortality from ${NAMES[e]} worth about ${F.money(Math.abs(yr))} a year over 2015 to 2024.`
       : `With ${what}, the added mortality from ${NAMES[e]} in Bernalillo and Sandoval counties would ${yr >= 0 ? "cost" : "save"} about ${F.money(Math.abs(yr))} a year.`;
     RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y][e] * V / 1e6),
       fmt: v => F.minus(v.toFixed(v === 0 ? 0 : Math.abs(v) < 1 ? 2 : 1)), fmtAxis: v => F.minus(String(+v.toFixed(2))),

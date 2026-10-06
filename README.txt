@@ -15,6 +15,18 @@ What this is
   index.html is the overview page. Everything runs in the browser; there is
   no server.
 
+Scenarios are set at the Central Avenue gauge (public tools only)
+  Every scenario in these tools is set at the Central Avenue gauge in
+  Albuquerque (USGS 08330000), and on each day the other three reaches move
+  in the same proportion. This is done only for these public tools, so a
+  reader can change one familiar flow and see what follows for PM10,
+  mortality, and costs. It is NOT the study's headline. The paper's results,
+  its valuation, and every number in its documents apply the added flow, the
+  low-flow floor, and the dry-channel comparison to each reach's own gauge
+  (Section 11 of the replication do-file). The 10% cut and the climate
+  scenarios are the same either way; the added flow, the floor, and the
+  dry-channel comparison give different numbers here than in the paper.
+
 Where the numbers come from
   data/ holds four files written by Section 17 of the study's replication
   do-file:
@@ -22,7 +34,8 @@ Where the numbers come from
     tool_daily.csv    one row per day, 2015 to 2024: population-weighted
                       downwind hours on each of the four river reaches, each
                       reach's flow, population-weighted PM10, baseline daily
-                      deaths by cause, and the exposed population
+                      deaths by cause, the exposed population, and a flag
+                      for days the Central Avenue gauge read below 100 cfs
     tool_params.csv   the headline regression coefficient and its standard
                       error, the three mortality coefficients of Liu et al.
                       (2019, New England Journal of Medicine 381:705-715,

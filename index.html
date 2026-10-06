@@ -65,7 +65,7 @@
 
 
   <h2>What the river is worth today</h2>
-  <p class="note">Compared with a channel that is essentially dry, over 2015 to 2024, computed live in your browser from the study's results.</p>
+  <p class="note">Compared with a river that is essentially dry (1 cfs at the Central Avenue gauge), over 2015 to 2024, computed live in your browser from the study's results.</p>
   <div class="facts" id="facts">
     <div class="fact"><div class="v" id="f-dc">&hellip;</div><div class="l">micrograms per cubic meter (&micro;g/m&sup3;) of PM<sub>10</sub> kept out of the air the Albuquerque area breathes, on a typical day</div></div>
     <div class="fact"><div class="v" id="f-d">&hellip;</div><div class="l">deaths from all causes avoided each year in Bernalillo and Sandoval counties</div></div>
@@ -80,7 +80,7 @@
 
     <details>
       <summary>How the tools calculate</summary>
-      <p>Every number the tools use, from the regression coefficient to the daily river flows, downwind hours, PM<sub>10</sub>, and baseline deaths, is written by the study's replication code. Your browser applies the same four equations the study does: the scenario's change in each reach's flow, the change in PM<sub>10</sub> that follows, the change in deaths, and their value. The 95% intervals come from the same 2,000 joint draws of the regression coefficient and the mortality coefficients that the replication code writes. A test in this repository recomputes every scenario the replication code reports and checks that the browser matches it.</p>
+      <p>Every number the tools use, from the regression coefficient to the daily river flows, downwind hours, PM<sub>10</sub>, and baseline deaths, is written by the study's replication code. Every scenario is set at the Central Avenue gauge in Albuquerque, and on each day the other three reaches move in the same proportion. That setting is for these public tools only, so you can change one familiar flow and see what follows. It is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. Your browser applies the same four equations the study does: the scenario's change in flow, the change in PM<sub>10</sub> that follows, the change in deaths, and their value. The 95% intervals come from the same 2,000 joint draws of the regression coefficient and the mortality coefficients that the replication code writes. A test in this repository recomputes every scenario the replication code reports and checks that the browser matches it.</p>
     </details>
     <details>
       <summary>What the tools do not show</summary>
