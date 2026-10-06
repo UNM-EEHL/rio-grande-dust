@@ -3,8 +3,8 @@ Environmental Economics and Health Lab, University of New Mexico
 
 What this is
   Three browser tools built on the results of "Flow in the Middle Rio Grande
-  and Particulate Air Pollution in the Albuquerque Area" (Benjamin A. Jones,
-  2026, working paper):
+  and Particulate Air Pollution in the Albuquerque Area" (Benjamin A. Jones
+  and Robert P. Berrens, 2026, working paper):
 
     pm10.html        river flow and downwind PM10
     mortality.html   river flow and short-term deaths (all causes,

@@ -21,7 +21,7 @@
     </a>
     <nav class="nav" aria-label="Tools">
       <a href="index.html">Overview</a>
-      <a href="pm10.html">River flow and PM10</a>
+      <a href="pm10.html">River flow and PM<sub>10</sub></a>
       <a href="mortality.html" aria-current="page">Mortality</a>
       <a href="costs.html">Economic costs</a>
     </nav>
@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 2 of 3</div>
     <h1>River Flow and Mortality</h1>
-    <p class="lede">Choose a change in the river and see how many more, or fewer, people in Bernalillo and Sandoval counties would die each year from the PM10 that follows, by all causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew.</p>
+    <p class="lede">Choose a change in the river and see how many more, or fewer, people in Bernalillo and Sandoval counties would die each year from the PM<sub>10</sub> that follows, by all causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew.</p>
   </div>
 </section>
 
@@ -68,12 +68,12 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's monitors, applies the scenario to that day's flow on each reach, and converts the result into a change in population-weighted PM10 with the study's headline regression coefficient. The change in PM10 is carried into deaths with the concentration-response functions of Liu and coauthors (2019), which give 0.44% more deaths from all causes, 0.36% more cardiovascular deaths, and 0.47% more respiratory deaths for each 10 &micro;g/m&sup3; of PM10, applied to each month's baseline deaths in the two counties. The annual figure is the daily average times 365.25.</p>
+      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's monitors, applies the scenario to that day's flow on each reach, and converts the result into a change in population-weighted PM<sub>10</sub> with the study's headline regression coefficient. The change in PM<sub>10</sub> is carried into deaths with the concentration-response functions of Liu and coauthors (2019), which give 0.44% more deaths from all causes, 0.36% more cardiovascular deaths, and 0.47% more respiratory deaths for each 10 &micro;g/m&sup3; of PM<sub>10</sub>, applied to each month's baseline deaths in the two counties. The annual figure is the daily average times 365.25.</p>
       <p>The 95% interval comes from 2,000 joint draws of the regression coefficient and the three mortality coefficients, written by the study's replication code; the tool reports the 2.5th and 97.5th percentiles across them. The study's own tables use a separate set of 2,000 draws, so intervals here can differ from them in the second decimal; the central estimates match exactly.</p>
     </details>
     <details>
       <summary>What is not included</summary>
-      <p>Only short-term deaths, all ages, from PM10. Long-term exposure, hospital visits, asthma, and fine particulate are not counted, so the totals are conservative. The estimate uses same-day river flow, which the study shows understates the effect of a bed that has been drying for weeks.</p>
+      <p>Only short-term deaths, all ages, from PM<sub>10</sub>. Long-term exposure, hospital visits, asthma, and fine particulate are not counted, so the totals are conservative. The estimate uses same-day river flow, which the study shows understates the effect of a bed that has been drying for weeks.</p>
     </details>
   </div>
 </main>
@@ -81,7 +81,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div>
-      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the author's own analysis and do not represent the views of any agency.</p>
+      <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab, University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency.</p>
       <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
       <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
     </div>
