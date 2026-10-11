@@ -124,5 +124,24 @@
     minus: s => String(s).replace(/^-/, "−")
   };
 
-  root.RGUI = { TYPES, PRESETS, describe, scenarioControls, debounce, fmt };
+  /* The volume of water at the Central Avenue gauge that a scenario adds or
+     removes, in acre-feet (AF) per year, from RGModel.water(). */
+  function sig3(x) {
+    const a = Math.abs(x);
+    if (a < 1) return a.toFixed(1);
+    const d = Math.pow(10, Math.max(0, Math.floor(Math.log10(a)) - 2));
+    return (Math.round(a / d) * d).toLocaleString("en-US");
+  }
+  const AF_NOTE = "One cfs held for a full day is about 1.98 acre-feet. This is the volume at the gauge; releases upstream would need to be somewhat larger, because some water is lost before it reaches Albuquerque.";
+  function waterText(sc, w) {
+    const a = w.afYr;
+    if (sc.type === "reference")
+      return `Water at the Central Avenue gauge in Albuquerque: the river as it actually flowed carried about ${sig3(a)} acre-feet (AF) per year more than the comparison river, over 2015 to 2024.`;
+    if (Math.abs(a) < 0.05) return "Water at the Central Avenue gauge in Albuquerque: this scenario changes no water, because the gauge never read below the level chosen.";
+    return a > 0
+      ? `Water needed at the Central Avenue gauge in Albuquerque: about ${sig3(a)} acre-feet (AF) per year more than actually flowed over 2015 to 2024.`
+      : `Water removed at the Central Avenue gauge in Albuquerque: about ${sig3(a)} acre-feet (AF) per year less than actually flowed over 2015 to 2024.`;
+  }
+
+  root.RGUI = { TYPES, PRESETS, describe, scenarioControls, debounce, fmt, sig3, waterText, AF_NOTE };
 })(window);

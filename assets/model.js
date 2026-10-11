@@ -101,6 +101,31 @@
       return dE;
     }
 
+    /* Water at the Central Avenue gauge. The scenario's flow at the gauge minus
+       the flow it actually recorded, each day of 2015 to 2024, converted at
+       1.98347 acre-feet (AF) per cubic foot per second held for one day and
+       averaged per year. Volume at the gauge only: releases upstream would
+       have to be larger, because some water is lost before it reaches
+       Albuquerque. */
+    const AF_PER_CFS_DAY = 1.98347;
+    function scenarioQ(sc, q, mo) {
+      const v = sc.value;
+      switch (sc.type) {
+        case "percent": return q * (1 + v);
+        case "seasonal": return (mo >= 7 && mo <= 10) ? q * (1 - 1.5 * v) : q * (1 - P.k_offseason * v);
+        case "add": return Math.max(q + v, 0);
+        case "floor": return Math.max(q, v);
+        case "reference": return v;
+        default: throw new Error("unknown scenario type " + sc.type);
+      }
+    }
+    function water(sc) {
+      let s = 0;
+      for (let t = 0; t < n; t++) s += scenarioQ(sc, D.q[2][t], D.mo[t]) - D.q[2][t];
+      const yrs = n / DAYS_PER_YEAR;
+      return { afYr: s * AF_PER_CFS_DAY / yrs, cfsMean: s / n, days: n };
+    }
+
     function daySet(which) {
       if (which === "bind") return Uint8Array.from(valid, (v, t) => v && D.bindc[t] ? 1 : 0);
       return valid;
@@ -184,7 +209,7 @@
       P, D, draws, years, ENDPOINTS,
       meanPop: popSum / n,
       vsl: { central: P.VSL, low: P.VSL_lo, high: P.VSL_hi },
-      dlnq, exposure, central, intervals, onePlace
+      dlnq, exposure, central, intervals, onePlace, water, AF_PER_CFS_DAY
     };
   }
 

@@ -140,3 +140,6 @@ table.small th, table.small td { text-align: left; padding: 6px 8px; border-bott
 
 /* chemical subscripts (PM10) that do not disturb line spacing */
 sub { font-size: 0.72em; line-height: 0; position: relative; vertical-align: baseline; bottom: -0.28em; }
+
+.water { margin: 0; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--blue); border-radius: 6px; }
+.water .af-note { display: block; margin-top: 4px; font-size: 0.86rem; color: var(--muted); }
