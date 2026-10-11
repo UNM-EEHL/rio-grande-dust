@@ -60,6 +60,7 @@
         <div class="stat"><div class="k">Over a decade</div><div class="v" id="v-dec"></div><div class="s">ten years at the annual rate</div></div>
         <div class="stat"><div class="k">Per Resident, Per Year</div><div class="v" id="v-pc"></div><div class="s" id="v-pc-s"></div></div>
       </div>
+      <p class="water" id="water"></p>
       <div class="busy" id="busy"></div>
       <div class="panel chart">
         <h3>By year</h3>
@@ -138,6 +139,15 @@
     $("v-pc").textContent = (yr < 0 ? "−$" : "$") + Math.abs(yr / M.meanPop).toFixed(2);
     $("v-pc-s").textContent = "across " + Math.round(M.meanPop).toLocaleString("en-US") + " residents in Bernalillo and Sandoval counties";
     $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
+    { const w = M.water(sc), af = w.afYr;
+      let per = "";
+      if (Math.abs(af) >= 1) {
+        const r = F.money(Math.abs(yr / af));
+        per = sc.type === "reference" ? ` That is about ${r} in economic damages avoided per acre-foot the river carried.`
+            : af > 0 ? ` That is about ${r} in economic damages ${yr <= 0 ? "avoided" : "added"} per acre-foot added.`
+                     : ` That is about ${r} in economic damages ${yr >= 0 ? "added" : "avoided"} per acre-foot removed.`;
+      }
+      $("water").innerHTML = RGUI.waterText(sc, w) + per + '<span class="af-note">' + RGUI.AF_NOTE + '</span>'; }
     const what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
       ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge in Albuquerque, the river as it actually flowed avoided about ${F.money(Math.abs(yr))} a year in economic damages from ${NAMES[e]} mortality over 2015 to 2024.`

@@ -51,6 +51,7 @@
         <div class="stat"><div class="k">Cardiovascular</div><div class="v" id="d-cvd"></div><div class="s" id="d-cvd-s"></div><div class="s" id="d-cvd-ci"></div></div>
         <div class="stat"><div class="k">Respiratory</div><div class="v" id="d-resp"></div><div class="s" id="d-resp-s"></div><div class="s" id="d-resp-ci"></div></div>
       </div>
+      <p class="water" id="water"></p>
       <div class="busy" id="busy"></div>
       <p class="note">Cardiovascular and respiratory mortality are part of the all-cause total, not in addition to it. Positive numbers are additional mortality; negative numbers are mortality avoided.</p>
       <div class="panel chart">
@@ -122,6 +123,7 @@
       $("d-" + e + "-ci").textContent = "";
     }
     $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
+    $("water").innerHTML = RGUI.waterText(sc, M.water(sc)) + '<span class="af-note">' + RGUI.AF_NOTE + '</span>';
     const a = c.deathsYr.all, what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
       ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge in Albuquerque, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} instances of mortality per year from all-causes in Bernalillo and Sandoval counties over 2015 to 2024.`

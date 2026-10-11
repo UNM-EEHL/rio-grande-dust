@@ -59,6 +59,7 @@
     </div>
     <div class="results">
       <p class="summary" id="sum1"></p>
+      <p class="water" id="water1"></p>
       <div class="stats even-k">
         <div class="stat primary"><div class="k">Change in PM<sub>10</sub> (%)</div><div class="v" id="s-pct"></div><div class="s" id="s-pct-ci"></div></div>
         <div class="stat"><div class="k">In micrograms per cubic meter (<span class="unit">&micro;g/m&sup3;</span>)</div><div class="v" id="s-ug"></div><div class="s" id="s-ug-ci"></div></div>
@@ -82,6 +83,7 @@
     </div>
     <div class="results">
       <p class="summary" id="sum2"></p>
+      <p class="water" id="water2"></p>
       <div class="stats">
         <div class="stat primary"><div class="k">Average change in PM<sub>10</sub></div><div class="v" id="r-ug"></div><div class="s" id="r-ug-ci"></div></div>
         <div class="stat"><div class="k">As a share of average PM<sub>10</sub></div><div class="v" id="r-pct"></div><div class="s" id="r-pct-s"></div></div>
@@ -154,6 +156,11 @@
     $("sum1").textContent = qNew === qNow || h === 0
       ? "With no change in flow, or no wind off the river, the river makes no difference to PM₁₀ that day."
       : `A neighborhood downwind of the river for ${h} hours, with ${qNew.toLocaleString("en-US")} cfs at the Central Avenue gauge instead of ${qNow.toLocaleString("en-US")}, breathes ${Math.abs(r.pct).toFixed(1)}% ${r.pct > 0 ? "more" : "less"} PM₁₀ that day: ${Math.abs(b * r.pct / 100).toFixed(2)} µg/m³ ${r.pct > 0 ? "more" : "less"} on an ordinary ${MONTHS[mon.value - 1]} day.`;
+    { const af = (qNew - qNow) * M.AF_PER_CFS_DAY;
+      $("water1").innerHTML = (qNew === qNow
+        ? "Water at the Central Avenue gauge in Albuquerque: no change from the baseline that day."
+        : `Water at the Central Avenue gauge in Albuquerque: about ${RGUI.sig3(af)} acre-feet (AF) ${af > 0 ? "more" : "less"} than the baseline over that one day.`)
+        + '<span class="af-note">' + RGUI.AF_NOTE + '</span>'; }
     const xs = [], ys = [], lo = [], hi = [];
     const XMAX = Math.max(1000, Math.ceil(Math.max(qNow, qNew) * 1.1 / 250) * 250);
     for (let i = 0; i <= 160; i++) {
@@ -192,6 +199,7 @@
     $("r-n").textContent = c.nDays.toLocaleString("en-US");
     $("r-ug-ci").textContent = "";
     $("warn2").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
+    $("water2").innerHTML = RGUI.waterText(sc, M.water(sc)) + '<span class="af-note">' + RGUI.AF_NOTE + '</span>';
     const what = RGUI.describe(sc, raw);
     $("sum2").textContent = sc.type === "reference"
       ? `Compared with ${what.replace("the river as it actually flowed, compared with ", "")}, the river as it actually flowed kept an average of ${Math.abs(c.dCmean).toFixed(3)} µg/m³ (${Math.abs(100 * c.dCmean / avgPM).toFixed(2)}%) of PM₁₀ out of the air the Albuquerque area breathes, every day of 2015 to 2024.`

@@ -27,6 +27,17 @@ Scenarios are set at the Central Avenue gauge (public tools only)
   scenarios are the same either way; the added flow, the floor, and the
   dry-channel comparison give different numbers here than in the paper.
 
+Water volume at the Central Avenue gauge (public tools only)
+  Each tool also reports the water a scenario adds or removes at the
+  Central Avenue gauge, in acre-feet (AF) per year: the scenario's flow at
+  the gauge minus the flow the gauge actually recorded, summed over every
+  day of 2015 to 2024, times 1.98347 AF per cfs-day, divided by the number
+  of years (assets/model.js, water()). The PM10 page's one-day panel gives
+  the same conversion for a single day. This is volume at the gauge only;
+  releases upstream would need to be larger because of losses before the
+  water reaches Albuquerque. It is arithmetic on the gauge record and
+  changes no estimate.
+
 Where the numbers come from
   data/ holds four files written by Section 17 of the study's replication
   do-file:
