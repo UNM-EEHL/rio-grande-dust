@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 1 of 3</div>
     <h1>River Flow and PM<sub>10</sub></h1>
-    <p class="lede">Two views of the same estimate. The first is one neighborhood on one day: the wind blows off the river for some hours, and you set the flow at the Central Avenue gauge in Albuquerque. The second is the whole Albuquerque area, over every day of 2015 to 2024 with the wind as it actually blew or, for the climate scenarios, a typical year; set to the paper's nine scenarios, it gives the paper's numbers.</p>
+    <p class="lede">Two views of the same estimate. The first is one neighborhood on one day: the wind blows off the river for some hours, and you set the flow at the Central Avenue gauge in Albuquerque. The second is the whole Albuquerque area, over every day of 2015 to 2024 with the wind as it actually blew or, for the climate scenarios, a typical year.</p>
   </div>
 </section>
 
@@ -78,12 +78,11 @@
     <div class="panel controls">
       <h3>Set the scenario</h3>
       <div id="sc"></div>
-      <div class="warn" id="warn2">This is far outside the flows the river carried from 2015 to 2024 and the scenarios the paper reports, so the result is an extrapolation.</div>
+      <div class="warn" id="warn2">This is far outside the flows the river carried from 2015 to 2024 and the scenarios the study considers, so the result is an extrapolation.</div>
       <button type="button" class="reset" id="reset2">Restore defaults</button>
     </div>
     <div class="results">
       <p class="summary" id="sum2"></p>
-      <p class="note" id="pnote2"></p>
       <p class="water" id="water2"></p>
       <div class="stats">
         <div class="stat primary"><div class="k">Average change in PM<sub>10</sub></div><div class="v" id="r-ug"></div><div class="s" id="r-ug-ci"></div></div>
@@ -102,7 +101,7 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>The paper's preferred regression estimates how much the log of daily PM<sub>10</sub> at a monitor changes for each hour the wind blows toward it from a reach of the river, per unit change in the log of that reach's flow. For one place and one day, the change in PM<sub>10</sub> is <em>exp</em>(<em>&beta;</em> &times; hours &times; ln(new flow / flow now)) &minus; 1, with <em>&beta;</em> = &minus;0.00231 the regression coefficient in column (2) of the paper's Table 1. For the whole area, the scenario changes the flow in each of the four reaches at its own gauge, as in the paper's Eq. (2); the change is applied on every day of 2015 to 2024 to the population-weighted downwind hours on each reach, using that reach's actual flow that day, converted into a change in PM<sub>10</sub> with the paper's Eq. (3), and averaged across days. The climate scenarios are applied, as in the paper, to a typical year, the 2015-2024 average of each calendar day. Population weights give each monitor a weight that falls with the square of its distance from its county's 2020 population center, and the two counties are combined by their population shares, as in the paper. The paper reports no interval on the change in PM<sub>10</sub>, so the 95% interval here always comes from 2,000 joint draws of the regression coefficient.</p>
+      <p>The study's preferred regression estimates how much the log of daily PM<sub>10</sub> at a monitor changes for each hour the wind blows toward it from a reach of the river, per unit change in the log of that reach's flow. For one place and one day, the change in PM<sub>10</sub> is <em>exp</em>(<em>&beta;</em> &times; hours &times; ln(new flow / flow now)) &minus; 1, with <em>&beta;</em> = &minus;0.00231 the estimated regression coefficient. For the whole area, the scenario changes the flow in each of the four reaches at its own gauge; the change is applied on every day of 2015 to 2024 to the population-weighted downwind hours on each reach, using that reach's actual flow that day, converted into a change in PM<sub>10</sub>, and averaged across days. The climate scenarios are applied to a typical year, the 2015-2024 average of each calendar day. Population weights give each monitor a weight that falls with the square of its distance from its county's 2020 population center, and the two counties are combined by their population shares. The 95% interval comes from 2,000 Monte Carlo draws of the regression coefficient.</p>
       <p>The effect is concentrated at low flow. Because the regression uses the log of flow, PM<sub>10</sub> responds to the percentage change in flow, so the same added water does far more when the river is low: raising a reach from 10 to 100 cfs lowers PM<sub>10</sub> by about 12% over a full day downwind, while raising it from 90 to 100 cfs lowers it by about 0.6%.</p>
     </details>
   </div>
@@ -202,7 +201,6 @@
     $("r-n").textContent = c.nDays.toLocaleString("en-US");
     $("r-n-s").innerHTML = c.climate ? "days of a typical year" : "of 2015 to 2024 with a PM<sub>10</sub> reading";
     $("r-ug-ci").textContent = "";
-    $("pnote2").textContent = RGUI.paperNote(c.prow);
     $("warn2").classList.toggle("on", RGUI.extrapolated(sc, raw));
     $("water2").innerHTML = RGUI.waterText(sc, M.water(sc)) + '<span class="af-note">' + RGUI.AF_NOTE + '</span>';
     const what = RGUI.describe(sc, raw);

@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 2 of 3</div>
     <h1>River Flow and Human Mortality</h1>
-    <p class="lede">Choose a change in the Rio Grande and see how much short-term human mortality (modeled) in Bernalillo and Sandoval counties would rise or fall each year from the PM<sub>10</sub> that follows, from all-causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew, or, for the climate scenarios, to a typical year. Set to the paper's nine scenarios, the numbers are those of the paper's Table 2.</p>
+    <p class="lede">Choose a change in the Rio Grande and see how much short-term human mortality (modeled) in Bernalillo and Sandoval counties would rise or fall each year from the PM<sub>10</sub> that follows, from all-causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew, or, for the climate scenarios, to a typical year.</p>
   </div>
 </section>
 
@@ -41,12 +41,11 @@
     <div class="panel controls">
       <h3>Set the scenario</h3>
       <div id="sc"></div>
-      <div class="warn" id="warn">This is far outside the flows the river carried from 2015 to 2024 and the scenarios the paper reports, so the result is an extrapolation.</div>
+      <div class="warn" id="warn">This is far outside the flows the river carried from 2015 to 2024 and the scenarios the study considers, so the result is an extrapolation.</div>
       <button type="button" class="reset" id="reset">Restore defaults</button>
     </div>
     <div class="results">
       <p class="summary" id="sum"></p>
-      <p class="note" id="pnote"></p>
       <div class="stats">
         <div class="stat primary"><div class="k">All-causes</div><div class="v" id="d-all"></div><div class="s" id="d-all-s"></div><div class="s" id="d-all-ci"></div></div>
         <div class="stat"><div class="k">Cardiovascular</div><div class="v" id="d-cvd"></div><div class="s" id="d-cvd-s"></div><div class="s" id="d-cvd-ci"></div></div>
@@ -72,12 +71,12 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's US EPA air quality monitors, applies the scenario to each reach's own flow that day, as in the paper's Eq. (2), and converts the result into a change in population-weighted PM<sub>10</sub> with the paper's preferred regression coefficient, its Eq. (3). The climate scenarios are applied, as in the paper, to a typical year, the 2015-2024 average of each calendar day. The change in PM<sub>10</sub> is carried into human mortality with the paper's Eq. (4) and the concentration-response functions of Liu and coauthors (2019), which give 0.44% higher mortality from all-causes, 0.36% higher cardiovascular mortality, and 0.47% higher respiratory mortality for each 10 &micro;g/m&sup3; of the two-day moving average of PM<sub>10</sub>, applied to each month's baseline mortality in Bernalillo and Sandoval counties from CDC WONDER, divided by the days in the month. On the 2015-2024 record the annual figure is the daily average times 365.25, the average length of a year once leap years are counted; for a typical year it is the sum over its 365 days. A comparison with a nearly dry river is shown as the paper shows its Scenario (1): the mortality that observed flows prevent, as a negative number.</p>
-      <p>For the paper's nine scenarios, the 95% confidence intervals are the paper's own, from its 2,000 Monte Carlo draws for each scenario and cause. For any other setting, the 95% interval comes from 2,000 joint draws of the regression coefficient and the three mortality coefficients, written by the website's Stata program, as the 2.5th and 97.5th percentiles across them; those draws give intervals close to the paper's, but not identical, where the two overlap.</p>
+      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's US EPA air quality monitors, applies the scenario to each reach's own flow that day, and converts the result into a change in population-weighted PM<sub>10</sub> with the study's preferred regression coefficient. The climate scenarios are applied to a typical year, the 2015-2024 average of each calendar day. The change in PM<sub>10</sub> is carried into human mortality with the concentration-response functions of Liu and coauthors (2019), which give 0.44% higher mortality from all-causes, 0.36% higher cardiovascular mortality, and 0.47% higher respiratory mortality for each 10 &micro;g/m&sup3; of the two-day moving average of PM<sub>10</sub>, applied to each month's baseline mortality in Bernalillo and Sandoval counties from CDC WONDER, divided by the days in the month. On the 2015-2024 record the annual figure is the daily average times 365.25, the average length of a year once leap years are counted; for a typical year it is the sum over its 365 days. A comparison with a nearly dry river is shown as the mortality that observed flows prevent, as a negative number.</p>
+      <p>The 95% interval comes from 2,000 Monte Carlo draws of the regression coefficient and the three mortality coefficients, written by the website's Stata program, as the 2.5th and 97.5th percentiles across them.</p>
     </details>
     <details>
       <summary>What is not included</summary>
-      <p>Only short-term mortality, at all ages, from PM<sub>10</sub> is counted. Illness, such as hospital visits and asthma, and long-term mortality are left out, so the totals are likely conservative. The estimates also use same-day river flow; in the paper, mean flow over the previous 80 days more than doubles the PM<sub>10</sub> estimate, which suggests that these results are conservative lower bounds.</p>
+      <p>Only short-term mortality, at all ages, from PM<sub>10</sub> is counted. Illness, such as hospital visits and asthma, and long-term mortality are left out, so the totals are likely conservative. The estimates also use same-day river flow; the study finds that mean flow over the previous 80 days more than doubles the PM<sub>10</sub> estimate, which suggests that these results are conservative lower bounds.</p>
     </details>
   </div>
 </main>
@@ -124,7 +123,6 @@
       $("d-" + e + "-s").textContent = verdict(sc, c.deathsYr[e], e);
       $("d-" + e + "-ci").textContent = "";
     }
-    $("pnote").textContent = RGUI.paperNote(c.prow);
     $("warn").classList.toggle("on", RGUI.extrapolated(sc, raw));
     $("water").innerHTML = RGUI.waterText(sc, M.water(sc)) + '<span class="af-note">' + RGUI.AF_NOTE + '</span>';
     const a = c.deathsYr.all, what = RGUI.describe(sc, raw);

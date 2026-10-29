@@ -13,25 +13,21 @@ What this is
     costs.html       river flow and the economic damages from that mortality
 
   index.html is the overview page. Everything runs in the browser; there is
-  no server. This website is separate from the paper's replication package
-  and is described in the paper's Supporting Information, Text S5.
+  no server.
 
-The tools match the paper
-  The tools apply the paper's Eqs. (2) to (5) to every scenario, changing
-  each of the four reaches at its own gauge, as the paper does (SI Eqs. S1
-  to S4). Scenarios that change the flow, add water, set a low-flow floor,
-  or compare with a nearly dry river run on every day of 2015 to 2024; the
-  two climate scenarios run on a typical year, the 2015-2024 average of each
-  calendar day, as the paper's Scenarios (5) to (9) do (SI Eqs. S5 to S7).
-  Values are in 2025 prices, at the US EPA value of a statistical life of
-  $11.82 million (US EPA's $8.71 million in 2015 prices, restated with the
-  CPI-U), as in the paper.
-
-  The paper's nine scenarios are one click away on every tool page. Set to
-  them, the tools give the paper's Tables 2 and 3 exactly, and show the
-  paper's own 95% confidence intervals. For any other setting the 95%
-  intervals come from 2,000 joint draws of the regression coefficient and
-  the three mortality coefficients.
+How the tools work
+  The tools complement the study. They use its estimates: the regression
+  coefficient, the three mortality coefficients, the value of a statistical
+  life, and the daily downwind hours, river flows, PM10, and baseline
+  mortality of 2015 to 2024. Readers construct their own river flow
+  scenarios from them, including the study's own. Every scenario changes
+  each of the four reaches at its own gauge. Scenarios that change the
+  flow, add water, set a low-flow floor, or compare with a nearly dry river
+  run on every day of 2015 to 2024; the two climate scenarios run on a
+  typical year, the 2015-2024 average of each calendar day. Values are in
+  2025 prices, at the US EPA value of a statistical life of $11.82 million.
+  The 95% intervals come from 2,000 Monte Carlo draws of the regression
+  coefficient and the three mortality coefficients.
 
 Water volume at the Central Avenue gauge
   Each tool also reports the water a scenario adds or removes at the Central
@@ -43,7 +39,7 @@ Water volume at the Central Avenue gauge
   arithmetic on the gauge record and changes no estimate.
 
 Where the numbers come from
-  code/site_data.do (Stata 19) reads the outputs of the paper's replication
+  code/site_data.do (Stata 19) reads the outputs of the study's replication
   do-file and writes the six files in data/:
 
     tool_daily.csv      one row per day, 2015 to 2024: population-weighted
@@ -54,7 +50,7 @@ Where the numbers come from
     tool_climyear.csv   the typical year: for each of 365 calendar days, the
                         2015-2024 mean of the downwind hours summed over the
                         reaches, PM10, baseline mortality, and flow
-    tool_params.csv     the paper's regression coefficient and its standard
+    tool_params.csv     the study's regression coefficient and its standard
                         error, the three mortality coefficients of Liu et al.
                         (2019, New England Journal of Medicine 381:705-715,
                         https://doi.org/10.1056/NEJMoa1817364) and their
@@ -64,27 +60,28 @@ Where the numbers come from
     tool_draws.csv      2,000 joint draws of the four coefficients
     tool_checks.csv     the tools' scenarios computed in Stata, the targets
                         the browser code is tested against
-    tool_paper.csv      the paper's Tables 2 and 3
+    tool_paper.csv      the study's published scenario results, which the
+                        tools use for the intervals of the study's own
+                        scenarios
 
-  To rebuild them, run the paper's replication do-file first, then, from
+  To rebuild them, run the study's replication do-file first, then, from
   this folder,
 
-    global REPL "<the folder holding the paper's replication package>"
+    global REPL "<the folder holding the study's replication package>"
     do code/site_data.do
 
-  site_data.do checks that the tools' daily series reproduce the paper's,
-  and that the tools give the paper's nine scenarios exactly.
-  assets/model.js applies the paper's equations to those files; it contains
+  site_data.do checks that the tools' daily series reproduce the study's,
+  and that the tools give the study's own scenarios exactly.
+  assets/model.js applies the study's equations to those files; it contains
   no estimated number of its own.
 
-Checking the tools against Stata and the paper
+Checking the tools against Stata
   With Node.js installed, from this folder:
 
     node tests/reconcile.mjs
 
-  It recomputes every scenario in data/tool_checks.csv and the paper's nine
-  scenarios in data/tool_paper.csv in the browser code and reports the
-  largest difference.
+  It recomputes every scenario in data/tool_checks.csv and data/tool_paper.csv
+  in the browser code and reports the largest difference.
 
 Viewing locally
   Browsers block data loading from files opened directly, so serve the
