@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 1 of 3</div>
     <h1>River Flow and PM<sub>10</sub></h1>
-    <p class="lede">Two views of the same estimate. The first is one neighborhood on one day: the wind blows off the river for some hours, and you set the flow at the Central Avenue gauge in Albuquerque. The second is the whole Albuquerque area over every day of 2015 to 2024, with the wind as it actually blew.</p>
+    <p class="lede">Two views of the same estimate. The first is one neighborhood on one day: the wind blows off the river for some hours, and you set the flow at the Central Avenue gauge in Albuquerque. The second is the whole Albuquerque area, over every day of 2015 to 2024 with the wind as it actually blew or, for the climate scenarios, a typical year; set to the paper's nine scenarios, it gives the paper's numbers.</p>
   </div>
 </section>
 
@@ -73,26 +73,27 @@
     </div>
   </div>
 
-  <h2>(2) The whole region (2015-2024)</h2>
+  <h2>(2) The whole Albuquerque area</h2>
   <div class="tool">
     <div class="panel controls">
       <h3>Set the scenario</h3>
       <div id="sc"></div>
-      <div class="warn" id="warn2">This is far outside the flows the river carried from 2015 to 2024, so the result is an extrapolation.</div>
+      <div class="warn" id="warn2">This is far outside the flows the river carried from 2015 to 2024 and the scenarios the paper reports, so the result is an extrapolation.</div>
       <button type="button" class="reset" id="reset2">Restore defaults</button>
     </div>
     <div class="results">
       <p class="summary" id="sum2"></p>
+      <p class="note" id="pnote2"></p>
       <p class="water" id="water2"></p>
       <div class="stats">
         <div class="stat primary"><div class="k">Average change in PM<sub>10</sub></div><div class="v" id="r-ug"></div><div class="s" id="r-ug-ci"></div></div>
         <div class="stat"><div class="k">As a share of average PM<sub>10</sub></div><div class="v" id="r-pct"></div><div class="s" id="r-pct-s"></div></div>
-        <div class="stat"><div class="k">Days in the calculation</div><div class="v" id="r-n"></div><div class="s">with a PM<sub>10</sub> reading</div></div>
+        <div class="stat"><div class="k">Days in the calculation</div><div class="v" id="r-n"></div><div class="s" id="r-n-s"></div></div>
       </div>
       <div class="busy" id="busy2"></div>
       <div class="panel chart">
-        <h3>By year</h3>
-        <div class="sub">Average change in population-weighted PM<sub>10</sub> under the scenario, &micro;g/m&sup3;</div>
+        <h3 id="c2h">By year</h3>
+        <div class="sub" id="c2sub">Average change in population-weighted PM<sub>10</sub> under the scenario, &micro;g/m&sup3;</div>
         <div id="c2"></div>
       </div>
     </div>
@@ -101,7 +102,7 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>The study's headline regression estimates how much the log of daily PM<sub>10</sub> at a monitor changes for each hour the wind blows toward it from a reach of the river, per unit change in the log of that reach's flow. For one place and one day, the change in PM<sub>10</sub> is <em>exp</em>(<em>b</em> &times; hours &times; ln(new flow / flow now)) &minus; 1, with <em>b</em> the regression coefficient. For the region, the scenario is set at the Central Avenue gauge and every reach moves in the same proportion that day; the change is applied on every day of 2015 to 2024 to the population-weighted downwind hours on all four reaches, using that day's actual Central Avenue flow, and averaged across days. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same. Population weights give each monitor a weight that falls with the square of its distance from each county's population center.</p>
+      <p>The paper's preferred regression estimates how much the log of daily PM<sub>10</sub> at a monitor changes for each hour the wind blows toward it from a reach of the river, per unit change in the log of that reach's flow. For one place and one day, the change in PM<sub>10</sub> is <em>exp</em>(<em>&beta;</em> &times; hours &times; ln(new flow / flow now)) &minus; 1, with <em>&beta;</em> = &minus;0.00231 the regression coefficient in column (2) of the paper's Table 1. For the whole area, the scenario changes the flow in each of the four reaches at its own gauge, as in the paper's Eq. (2); the change is applied on every day of 2015 to 2024 to the population-weighted downwind hours on each reach, using that reach's actual flow that day, converted into a change in PM<sub>10</sub> with the paper's Eq. (3), and averaged across days. The climate scenarios are applied, as in the paper, to a typical year, the 2015-2024 average of each calendar day. Population weights give each monitor a weight that falls with the square of its distance from each county's population center, as in the paper. The paper reports no interval on the change in PM<sub>10</sub>, so the 95% interval here always comes from 2,000 joint draws of the regression coefficient.</p>
       <p>The effect is concentrated at low flow. Because the regression uses the log of flow, halving the flow has the same effect whether the river is at 1,000 or 100 cfs; the study finds that the true response is steeper than that at low flow and flatter at high flow, so these numbers understate the change when the river is very low and overstate it when the river is high.</p>
     </details>
   </div>
@@ -111,7 +112,7 @@
   <div class="wrap">
     <div>
       <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab (EEHL), University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
-      <p><strong>This work and its results may not be used or shared without proper citation:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>Flow in the Middle Rio Grande and Particulate Air Pollution in the Albuquerque Area</em>. Working paper, Department of Economics, University of New Mexico.</p>
+      <p><strong>This work and its results may not be used or shared without proper citation:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>River of Dust: The Drying Middle Rio Grande, Particulate Air Pollution, and Human Health Damages</em>. Working paper, Department of Economics, University of New Mexico.</p>
       <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
       <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
     </div>
@@ -182,7 +183,9 @@
     setBase(); one();
   });
 
-  const avgPM = (() => { let s = 0, n = 0; M.D.pm10.forEach(v => { if (Number.isFinite(v)) { s += v; n++; } }); return s / n; })();
+  const avg = a => { let s = 0, n = 0; a.forEach(v => { if (Number.isFinite(v)) { s += v; n++; } }); return s / n; };
+  const avgObs = avg(M.D.pm10), avgClim = avg(M.C.pm10);
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const slow = RGUI.debounce((sc) => {
     $("busy2").textContent = "Computing 95% intervals…";
     setTimeout(() => {
@@ -192,21 +195,35 @@
     }, 20);
   }, 120);
   const ctl2 = RGUI.scenarioControls($("sc"), (sc, raw, final) => {
-    const c = M.central(sc);
+    const c = M.central(sc), avgPM = c.climate ? avgClim : avgObs;
     $("r-ug").textContent = F.signed(c.dCmean, 3);
     $("r-pct").textContent = F.signed(100 * c.dCmean / avgPM, 2) + "%";
     $("r-pct-s").textContent = "of an average " + avgPM.toFixed(1) + " µg/m³";
     $("r-n").textContent = c.nDays.toLocaleString("en-US");
+    $("r-n-s").innerHTML = c.climate ? "days of a typical year" : "of 2015 to 2024 with a PM<sub>10</sub> reading";
     $("r-ug-ci").textContent = "";
-    $("warn2").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
+    $("pnote2").textContent = RGUI.paperNote(c.prow);
+    $("warn2").classList.toggle("on", RGUI.extrapolated(sc, raw));
     $("water2").innerHTML = RGUI.waterText(sc, M.water(sc)) + '<span class="af-note">' + RGUI.AF_NOTE + '</span>';
     const what = RGUI.describe(sc, raw);
     $("sum2").textContent = sc.type === "reference"
-      ? `Compared with ${what.replace("the river as it actually flowed, compared with ", "")}, the river as it actually flowed kept an average of ${Math.abs(c.dCmean).toFixed(3)} µg/m³ (${Math.abs(100 * c.dCmean / avgPM).toFixed(2)}%) of PM₁₀ out of the air the Albuquerque area breathes, every day of 2015 to 2024.`
-      : `Under ${what}, the air the Albuquerque area breathes would have carried ${Math.abs(c.dCmean).toFixed(3)} µg/m³ (${Math.abs(100 * c.dCmean / avgPM).toFixed(2)}%) ${c.dCmean >= 0 ? "more" : "less"} PM₁₀ on an average day of 2015 to 2024.`;
-    RGCharts.bars($("c2"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].dCmean),
-      fmt: v => F.minus(v.toFixed(3)), fmtAxis: v => F.minus(+v.toFixed(3)), ylabel: "µg/m³",
-      aria: "Average change in PM₁₀ by year" });
+      ? `Compared with ${what}, the river as it actually flowed kept an average of ${Math.abs(c.dCmean).toFixed(3)} µg/m³ (${Math.abs(100 * c.dCmean / avgPM).toFixed(2)}%) of PM₁₀ out of the air the Albuquerque area breathes, every day of 2015 to 2024.`
+      : c.climate
+        ? `In ${what}, the air the Albuquerque area breathes would carry ${Math.abs(c.dCmean).toFixed(3)} µg/m³ (${Math.abs(100 * c.dCmean / avgPM).toFixed(2)}%) more PM₁₀ on an average day.`
+        : `Under ${what}, the air the Albuquerque area breathes would have carried ${Math.abs(c.dCmean).toFixed(3)} µg/m³ (${Math.abs(100 * c.dCmean / avgPM).toFixed(2)}%) ${c.dCmean >= 0 ? "more" : "less"} PM₁₀ on an average day of 2015 to 2024.`;
+    if (c.climate) {
+      $("c2h").textContent = "By month of a typical year";
+      $("c2sub").innerHTML = "Average change in population-weighted PM<sub>10</sub> under the scenario, &micro;g/m&sup3;";
+      RGCharts.bars($("c2"), { labels: MON, values: MON.map((m, i) => c.byMonth[i + 1].dCmean),
+        fmt: v => F.minus(v.toFixed(3)), fmtAxis: v => F.minus(+v.toFixed(3)), ylabel: "µg/m³",
+        aria: "Average change in PM₁₀ by month of a typical year" });
+    } else {
+      $("c2h").textContent = "By year";
+      $("c2sub").innerHTML = "Average change in population-weighted PM<sub>10</sub> under the scenario, &micro;g/m&sup3;";
+      RGCharts.bars($("c2"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].dCmean),
+        fmt: v => F.minus(v.toFixed(3)), fmtAxis: v => F.minus(+v.toFixed(3)), ylabel: "µg/m³",
+        aria: "Average change in PM₁₀ by year" });
+    }
     slow(sc);
   });
   $("reset2").addEventListener("click", () => ctl2.reset());

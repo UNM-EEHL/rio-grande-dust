@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="eyebrow">Tool 2 of 3</div>
     <h1>River Flow and Human Mortality</h1>
-    <p class="lede">Choose a change in the Rio Grande and see how much short-term human mortality (modeled) in Bernalillo and Sandoval counties would rise or fall each year from the PM<sub>10</sub> that follows, from all-causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew.</p>
+    <p class="lede">Choose a change in the Rio Grande and see how much short-term human mortality (modeled) in Bernalillo and Sandoval counties would rise or fall each year from the PM<sub>10</sub> that follows, from all-causes, cardiovascular disease, and respiratory disease. Each scenario is applied to every day of 2015 to 2024, with the wind as it actually blew, or, for the climate scenarios, to a typical year. Set to the paper's nine scenarios, the numbers are those of the paper's Table 2.</p>
   </div>
 </section>
 
@@ -41,11 +41,12 @@
     <div class="panel controls">
       <h3>Set the scenario</h3>
       <div id="sc"></div>
-      <div class="warn" id="warn">This is far outside the flows the river carried from 2015 to 2024, so the result is an extrapolation.</div>
+      <div class="warn" id="warn">This is far outside the flows the river carried from 2015 to 2024 and the scenarios the paper reports, so the result is an extrapolation.</div>
       <button type="button" class="reset" id="reset">Restore defaults</button>
     </div>
     <div class="results">
       <p class="summary" id="sum"></p>
+      <p class="note" id="pnote"></p>
       <div class="stats">
         <div class="stat primary"><div class="k">All-causes</div><div class="v" id="d-all"></div><div class="s" id="d-all-s"></div><div class="s" id="d-all-ci"></div></div>
         <div class="stat"><div class="k">Cardiovascular</div><div class="v" id="d-cvd"></div><div class="s" id="d-cvd-s"></div><div class="s" id="d-cvd-ci"></div></div>
@@ -55,13 +56,13 @@
       <div class="busy" id="busy"></div>
       <p class="note">Cardiovascular and respiratory mortality are part of the all-cause total, not in addition to it. Positive numbers are additional mortality; negative numbers are mortality avoided.</p>
       <div class="panel chart">
-        <h3>All-cause human mortality by year (modeled)</h3>
-        <div class="sub">Under the scenario, each calendar year of 2015 to 2024</div>
+        <h3 id="c1h">All-cause human mortality by year (modeled)</h3>
+        <div class="sub" id="c1sub">Under the scenario, each calendar year of 2015 to 2024</div>
         <div id="c1"></div>
       </div>
       <div class="panel chart">
         <h3>How the effect moves with the scenario</h3>
-        <div class="sub">All-cause human mortality per year across the slider's range; the shaded band is the 95% interval</div>
+        <div class="sub">All-cause human mortality per year across the slider's range; the shaded band is the 95% interval across the 2,000 joint draws</div>
         <div class="busy" id="band"></div>
         <div id="c2"></div>
       </div>
@@ -71,8 +72,8 @@
   <div class="prose">
     <details>
       <summary>How this is calculated</summary>
-      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's US EPA air quality monitors, applies the scenario to that day's flow at the Central Avenue gauge in Albuquerque, moves the other three reaches in the same proportion, and converts the result into a change in population-weighted PM<sub>10</sub> with the study's headline regression coefficient. The change in PM<sub>10</sub> is carried into human mortality with the concentration-response functions of Liu and coauthors (2019), which give 0.44% higher mortality from all-causes, 0.36% higher cardiovascular mortality, and 0.47% higher respiratory mortality for each 10 &micro;g/m&sup3; of PM<sub>10</sub>, applied to each month's baseline mortality in Bernalillo and Sandoval counties. The annual figure is the daily average times 365.25, the average length of a year once leap years are counted, rather than 365. The Central Avenue setting is for these public tools only and is not the study's headline: the paper applies added flow, a low-flow floor, and the dry-river comparison to each reach's own gauge, so those three scenarios give different numbers here than in the paper, while the percentage cuts and the climate scenarios are the same.</p>
-      <p>The 95% interval comes from 2,000 joint draws of the regression coefficient and the three mortality coefficients, written by the study's replication code; the tool reports the 2.5th and 97.5th percentiles across them. The study's own tables use a separate set of 2,000 draws, so intervals here can differ from them in the second decimal; the central estimates match exactly.</p>
+      <p>For each day of 2015 to 2024 the tool takes the population-weighted hours the wind blew from each of the four river reaches toward the Albuquerque area's US EPA air quality monitors, applies the scenario to each reach's own flow that day, as in the paper's Eq. (2), and converts the result into a change in population-weighted PM<sub>10</sub> with the paper's preferred regression coefficient, its Eq. (3). The climate scenarios are applied, as in the paper, to a typical year, the 2015-2024 average of each calendar day. The change in PM<sub>10</sub> is carried into human mortality with the paper's Eq. (4) and the concentration-response functions of Liu and coauthors (2019), which give 0.44% higher mortality from all-causes, 0.36% higher cardiovascular mortality, and 0.47% higher respiratory mortality for each 10 &micro;g/m&sup3; of PM<sub>10</sub>, applied to each month's baseline mortality in Bernalillo and Sandoval counties. On the 2015-2024 record the annual figure is the daily average times 365.25, the average length of a year once leap years are counted; for a typical year it is the sum over its 365 days. A comparison with a nearly dry river is shown as the paper shows its Scenario (1): the mortality that observed flows prevent, as a negative number.</p>
+      <p>For the paper's nine scenarios, the 95% confidence intervals are the paper's own, from its 2,000 Monte Carlo draws for each scenario and cause. For any other setting, the 95% interval comes from 2,000 joint draws of the regression coefficient and the three mortality coefficients, written by the replication code, as the 2.5th and 97.5th percentiles across them; those draws give intervals close to the paper's, but not identical, where the two overlap.</p>
     </details>
     <details>
       <summary>What is not included</summary>
@@ -85,7 +86,7 @@
   <div class="wrap">
     <div>
       <p>&copy; 2026 Benjamin A. Jones, Environmental Economics and Health Lab (EEHL), University of New Mexico. The results are the authors' own analysis and do not represent the views of any agency or institution.</p>
-      <p><strong>This work and its results may not be used or shared without proper citation:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>Flow in the Middle Rio Grande and Particulate Air Pollution in the Albuquerque Area</em>. Working paper, Department of Economics, University of New Mexico.</p>
+      <p><strong>This work and its results may not be used or shared without proper citation:</strong> Jones, B.A., and Berrens, R.P. (2026). <em>River of Dust: The Drying Middle Rio Grande, Particulate Air Pollution, and Human Health Damages</em>. Working paper, Department of Economics, University of New Mexico.</p>
       <p>Contact: <a href="mailto:bajones@unm.edu">bajones@unm.edu</a></p>
       <p>Code and data: <a href="https://github.com/UNM-EEHL/rio-grande-dust">github.com/UNM-EEHL/rio-grande-dust</a></p>
     </div>
@@ -100,59 +101,61 @@
 (async function () {
   const M = await RGModel.load("data/");
   const F = RGUI.fmt, $ = id => document.getElementById(id);
-  let ctl = null, lastCI = null;
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  let ctl = null;
   const LBL = { all: "all-cause", cvd: "cardiovascular", resp: "respiratory" };
   function verdict(sc, x, e) {
     const L = LBL[e];
-    if (sc.type === "reference") return x >= 0 ? `${L} mortality (modeled) per year the river prevents` : `more ${L} mortality (modeled) per year than the comparison river`;
+    if (sc.type === "reference") return x <= 0 ? `${L} mortality (modeled) per year that observed flows prevent` : `more ${L} mortality (modeled) per year than the comparison river`;
     return x >= 0 ? `additional ${L} mortality (modeled) per year` : `${L} mortality (modeled) avoided per year`;
   }
-  function showCI(ci) {
+  function showCI(ci, sc) {
     for (const e of M.ENDPOINTS)
-      $("d-" + e + "-ci").textContent = "95% interval " + F.minus(F.deaths(ci[e][0])) + " to " + F.minus(F.deaths(ci[e][1]));
+      $("d-" + e + "-ci").textContent = RGUI.ciSource(ci) + " " + F.minus(F.deaths(ci[e][0], sc)) + " to " + F.minus(F.deaths(ci[e][1], sc));
   }
   const slow = RGUI.debounce((sc) => {
     $("busy").textContent = "Computing 95% intervals…";
-    setTimeout(() => { lastCI = M.intervals(sc); showCI(lastCI); $("busy").textContent = ""; }, 20);
+    setTimeout(() => { showCI(M.intervals(sc), sc); $("busy").textContent = ""; }, 20);
   }, 120);
   function render(sc, raw) {
     const c = M.central(sc);
     for (const e of M.ENDPOINTS) {
-      $("d-" + e).textContent = F.minus(F.deaths(c.deathsYr[e]));
+      $("d-" + e).textContent = F.minus(F.deaths(c.deathsYr[e], sc));
       $("d-" + e + "-s").textContent = verdict(sc, c.deathsYr[e], e);
       $("d-" + e + "-ci").textContent = "";
     }
-    $("warn").classList.toggle("on", (sc.type === "percent" && raw <= -60) || (sc.type === "seasonal" && raw >= 45));
+    $("pnote").textContent = RGUI.paperNote(c.prow);
+    $("warn").classList.toggle("on", RGUI.extrapolated(sc, raw));
     $("water").innerHTML = RGUI.waterText(sc, M.water(sc)) + '<span class="af-note">' + RGUI.AF_NOTE + '</span>';
     const a = c.deathsYr.all, what = RGUI.describe(sc, raw);
     $("sum").textContent = sc.type === "reference"
-      ? `Compared with a river carrying ${raw} cfs at the Central Avenue gauge in Albuquerque, the river as it actually flowed prevented about ${F.deaths(Math.abs(a))} instances of mortality per year from all-causes in Bernalillo and Sandoval counties over 2015 to 2024.`
-      : `With ${what}, Bernalillo and Sandoval counties would have about ${F.deaths(Math.abs(a))} ${a >= 0 ? "more" : "fewer"} instances of mortality per year from all-causes.`;
-    RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].all),
-      fmt: v => F.minus(F.deaths(v)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Modeled human mortality, all-causes",
-      aria: "All-cause modeled human mortality by year" });
+      ? `Compared with ${what}, the river as it actually flowed prevented about ${F.deaths(Math.abs(a), sc)} instances of mortality per year from all-causes in Bernalillo and Sandoval counties over 2015 to 2024.`
+      : c.climate
+        ? `In ${what}, Bernalillo and Sandoval counties would have about ${F.deaths(Math.abs(a), sc)} ${a >= 0 ? "more" : "fewer"} instances of mortality per year from all-causes.`
+        : `With ${what}, Bernalillo and Sandoval counties would have had about ${F.deaths(Math.abs(a), sc)} ${a >= 0 ? "more" : "fewer"} instances of mortality per year from all-causes.`;
+    if (c.climate) {
+      $("c1h").textContent = "All-cause human mortality by month of a typical year (modeled)";
+      $("c1sub").textContent = "Under the scenario, each month of a typical year; the twelve months add up to the annual figure";
+      RGCharts.bars($("c1"), { labels: MON, values: MON.map((m, i) => c.byMonth[i + 1].all),
+        fmt: v => F.minus(F.deaths(v, sc)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Modeled human mortality, all-causes",
+        aria: "All-cause modeled human mortality by month of a typical year" });
+    } else {
+      $("c1h").textContent = "All-cause human mortality by year (modeled)";
+      $("c1sub").textContent = "Under the scenario, each calendar year of 2015 to 2024";
+      RGCharts.bars($("c1"), { labels: c.years.map(String), values: c.years.map(y => c.byYear[y].all),
+        fmt: v => F.minus(F.deaths(v, sc)), fmtAxis: v => F.minus(String(+v.toFixed(3))), ylabel: "Modeled human mortality, all-causes",
+        aria: "All-cause modeled human mortality by year" });
+    }
     const g = ctl ? ctl.grid() : null;
     if (g) { cur2 = { g, raw, a }; drawC2(); }
     slow(sc);
   }
-  /* The second chart's 95% band: the all-cause interval across the 2,000 joint draws at
-     each point of the slider's range. It depends only on the scenario type, so it is
-     computed once per type, a few points at a time so the page stays responsive. */
+  /* The second chart's 95% band: the all-cause interval across the 2,000 joint
+     draws at each point of the slider's range. It depends only on the scenario
+     type, so it is computed once per type, a few points at a time so the page
+     stays responsive. */
   let cur2 = null;
   const bands = {}, busyBand = {};
-  function ciAll(sc) {
-    const dE = M.exposure(sc), D = M.D, K = M.draws.bE.length, idx = [];
-    for (let t = 0; t < D.n; t++) if (Number.isFinite(D.pm10[t])) idx.push(t);
-    const out = new Float64Array(K), y0 = D.y0.all;
-    for (let k = 0; k < K; k++) {
-      const bE = M.draws.bE[k], b = M.draws.all[k];
-      let s = 0;
-      for (let i = 0; i < idx.length; i++) { const t = idx[i]; s += y0[t] * (Math.exp(b * D.pm10[t] * (Math.exp(bE * dE[t]) - 1)) - 1); }
-      out[k] = s / idx.length * 365.25;
-    }
-    out.sort();
-    return [out[Math.floor(0.025 * K) - 1], out[Math.ceil(0.975 * K) - 1]];
-  }
   function drawC2() {
     const { g, raw, a } = cur2, B = bands[g.type];
     const xs = B ? B.xs : g.raw;
@@ -160,7 +163,7 @@
     RGCharts.line($("c2"), { x: xs, y: ys, lo: B ? B.lo : undefined, hi: B ? B.hi : undefined,
       xlabel: RGUI.TYPES[g.type].label, ylabel: "Modeled human mortality per year, all-causes",
       fmtX: v => g.show(v), fmtY: v => F.minus(String(+v.toFixed(2))),
-      marker: { x: raw, y: a, label: F.minus(F.deaths(a)) }, aria: "Modeled human mortality across the scenario range" });
+      marker: { x: raw, y: a, label: F.minus(F.deaths(a, { type: g.type })) }, aria: "Modeled human mortality across the scenario range" });
     if (!B && !busyBand[g.type]) buildBand(g);
   }
   function buildBand(g) {
@@ -170,9 +173,9 @@
     let i = 0;
     $("band").textContent = "Computing the 95% interval band…";
     (function step() {
-      const r = xs[i], sc = { type: g.type, value: g.toValue(r) };
+      const sc = { type: g.type, value: g.toValue(xs[i]) };
       ys.push(M.central(sc).deathsYr.all);
-      const ci = ciAll(sc); lo.push(ci[0]); hi.push(ci[1]);
+      const ci = M.drawIntervals(sc).all; lo.push(ci[0]); hi.push(ci[1]);
       i++;
       if (i < xs.length) { setTimeout(step, 0); return; }
       bands[g.type] = { xs, ys, lo, hi };
