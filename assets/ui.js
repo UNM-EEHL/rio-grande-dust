@@ -6,40 +6,40 @@
     percent: { btn: "Change the flow", label: "Change in flow in every reach",
                min: -90, max: 100, step: 1, def: -10, toValue: v => v / 100,
                show: v => (v > 0 ? "+" : "") + v + "%",
-               hint: "A proportional change to the flow each of the four reaches actually carried on every day of 2015 to 2024. The paper's Scenario (2) is 10% less." },
+               hint: "A proportional change to the flow each of the four reaches actually carried on every day of 2015 to 2024." },
     climate: { btn: "Climate: less water", label: "Loss of water, the same share in every month",
                min: 2, max: 60, step: 1, def: 30, toValue: v => v / 100,
                show: v => v + "% per year",
-               hint: "A typical year under a drier climate: the 2015 to 2024 average of each calendar day, with every reach carrying this share less water in every month. The paper's Scenarios (5) to (7) are 12%, 30%, and 50%." },
+               hint: "A typical year under a drier climate: the 2015 to 2024 average of each calendar day, with every reach carrying this share less water in every month." },
     seasonal: { btn: "Climate: dry-season loss", label: "Loss of water, concentrated in July to October",
                 min: 2, max: 60, step: 1, def: 30, toValue: v => v / 100,
                 show: v => v + "% per year",
-                hint: "The same annual loss of water in a typical year, taken one and a half times as hard in July to October, the months in which declining base flow leaves the river bed driest, and less hard in the other eight months. The paper's Scenarios (8) and (9) are 12% and 30%." },
+                hint: "The same annual loss of water in a typical year, taken one and a half times as hard in July to October, the months in which declining base flow leaves the river bed driest, and less hard in the other eight months." },
     add: { btn: "Add water", label: "Water added to every reach",
            min: 10, max: 500, step: 10, def: 100, toValue: v => v,
            show: v => "+" + v + " cfs",
-           hint: "A fixed amount of extra flow, in cubic feet per second (cfs), in each of the four reaches on every day of 2015 to 2024. The paper's Scenario (3) is 100 cfs." },
+           hint: "A fixed amount of extra flow, in cubic feet per second (cfs), in each of the four reaches on every day of 2015 to 2024." },
     floor: { btn: "Low-flow floor", label: "Minimum flow in every reach",
              min: 10, max: 300, step: 5, def: 100, toValue: v => v,
              show: v => v + " cfs",
-             hint: "Every day a reach ran below this flow is raised to it; days above it are left alone. The paper's Scenario (4) is 100 cfs, the minimum the 2003 Biological Opinion required at the Central Avenue gauge in Albuquerque, applied to every reach." },
+             hint: "Every day a reach ran below this flow is raised to it; days above it are left alone. The 2003 Biological Opinion required a minimum of 100 cfs at the Central Avenue gauge in Albuquerque." },
     reference: { btn: "Versus a dry river", label: "Flow in every reach of the comparison river",
                  min: 1, max: 100, step: 1, def: 1, toValue: v => v,
                  show: v => v + " cfs",
-                 hint: "What the river as it actually flowed prevents, compared with a river carrying only this much in every reach on every day of 2015 to 2024. The results are negative because they are prevented. The paper's Scenario (1) is 1 cfs, a nearly dry river." }
+                 hint: "What the river as it actually flowed prevents, compared with a river carrying only this much in every reach on every day of 2015 to 2024. The results are negative because they are prevented. A river carrying 1 cfs is nearly dry." }
   };
 
-  /* The paper's nine scenarios, numbered as in its Tables 2 and 3. */
+  /* Quick scenarios: the nine scenarios the study reports. */
   const PRESETS = [
-    { name: "(1) Observed flows instead of 1 cfs", type: "reference", v: 1 },
-    { name: "(2) 10% less flow", type: "percent", v: -10 },
-    { name: "(3) 100 cfs more flow", type: "add", v: 100 },
-    { name: "(4) Flows below 100 cfs raised to 100 cfs", type: "floor", v: 100 },
-    { name: "(5) 12% less water, every month", type: "climate", v: 12 },
-    { name: "(6) 30% less water, every month", type: "climate", v: 30 },
-    { name: "(7) 50% less water, every month", type: "climate", v: 50 },
-    { name: "(8) 12% less water, weighted to July-October", type: "seasonal", v: 12 },
-    { name: "(9) 30% less water, weighted to July-October", type: "seasonal", v: 30 }
+    { name: "Observed flows instead of 1 cfs", type: "reference", v: 1 },
+    { name: "10% less flow", type: "percent", v: -10 },
+    { name: "100 cfs more flow", type: "add", v: 100 },
+    { name: "Flows below 100 cfs raised to 100 cfs", type: "floor", v: 100 },
+    { name: "12% less water, every month", type: "climate", v: 12 },
+    { name: "30% less water, every month", type: "climate", v: 30 },
+    { name: "50% less water, every month", type: "climate", v: 50 },
+    { name: "12% less water, weighted to July-October", type: "seasonal", v: 12 },
+    { name: "30% less water, weighted to July-October", type: "seasonal", v: 30 }
   ];
 
   function describe(sc, raw) {
@@ -57,9 +57,9 @@
   /* the period a result covers, for summaries */
   const period = sc => (isClimate(sc) ? "in a typical year" : "per year over 2015 to 2024");
 
-  /* "This is the paper's Scenario (n)" line, empty otherwise. */
+  /* No scenario note on the site pages. */
   function paperNote(prow) {
-    return prow ? `This is the paper's Scenario (${prow}); the numbers here are those in its Tables 2 and 3.` : "";
+    return "";
   }
 
   /* Out of the range the river or the paper covers. */
@@ -73,7 +73,7 @@
     opts = opts || {};
     let type = opts.type || "percent";
     box.innerHTML = `
-      <div class="ctl"><label>The paper's nine scenarios</label>
+      <div class="ctl"><label>Quick scenarios</label>
         <div class="presets">${PRESETS.map((p, i) => `<button type="button" data-p="${i}">${p.name}</button>`).join("")}</div></div>
       <div class="ctl"><label>Or build your own</label>
         <div class="seg" role="group" aria-label="Scenario type">
@@ -179,7 +179,7 @@
 
   /* The source line under a 95% interval. */
   function ciSource(ci) {
-    return ci.source === "paper" ? "95% CI, as in the paper" : "95% interval";
+    return "95% interval";
   }
 
   root.RGUI = { TYPES, PRESETS, describe, isClimate, period, paperNote, extrapolated, scenarioControls,
